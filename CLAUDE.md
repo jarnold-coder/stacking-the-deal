@@ -19,7 +19,7 @@ Owner: Jonathan Arnold, Arnold Development Group. GitHub account for this repo: 
 ## App structure (inside `src/app.html`)
 
 - Views: Primer (six paged lessons), The Deal (dashboard), Glossary, Inputs. Bottom nav switches them; `goView()` and `goStep()` are globals.
-- Layout: `#app` is a full-height flex column; `#scroller` owns all scrolling; `.bnav` sits outside it. This keeps the nav anchored inside iOS-embedded frames, which expand to content height. Never switch the nav back to `position:fixed`.
+- Layout: `#app` is a full-height flex column; `#scroller` owns all scrolling; `.bnav` sits outside it. This keeps the nav anchored inside iOS-embedded frames, which expand to content height. Never switch the nav back to `position:fixed`. The verdict strip compacts via an IntersectionObserver on `.vsentinel` (not scroll events, which never reached the scroller on Jonathan's phone); while compact, `#app.deal-compact` unsticks the brand bar and `.bnav.mini` drops nav labels.
 - Engine: `calc(moves, assumptions)` returns every number the page shows. `A` holds defaults; `state.a` holds live assumptions (persisted in localStorage `std-a`). Inputs are generated from `SCHEMA`; add a new assumption in `A` and `SCHEMA` and it appears on the Inputs tab.
 - Moves: `MOVES` array, `kind: 'design' | 'capital'`. Each has `desc(a)` and `why(a, w)` prose; the math panel diffs the stack with and without the move using `BUDGET_LINES`, `CREDIT_LINES`, `INCOME_LINES`, `OPEX_LINES`.
 - Charts are plain HTML (stacked bars, horizontal waterfall, gauge). Palette validated for light and dark; series colors are `--s-debt`, `--s-credit`, `--s-equity`.
