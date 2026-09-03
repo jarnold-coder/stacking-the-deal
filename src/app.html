@@ -1,0 +1,1008 @@
+<title>Stacking the Deal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --bg:#F1F2EC; --surface:#FAFAF6; --surface2:#E6E9E0; --ink:#161F1A; --ink2:#46534B; --muted:#78857C; --line:#D3D8CC; --line2:#BFC6B9;
+  --accent:#2A6E4C; --accent-ink:#FFFFFF; --accent-soft:#DDEBE2;
+  --s-debt:#3B6FC4; --s-credit:#2E8A5C; --s-equity:#C4842A;
+  --u1:#243F6B; --u2:#3B6FC4; --u3:#7DA2DF; --u4:#B4C8EC; --u5:#D9E3F4;
+  --good:#1E8E5A; --good-soft:#DCEFE3; --warn:#B8791A; --warn-soft:#F4E8D0; --bad:#C2453A; --bad-soft:#F6DCD8;
+  --shadow:0 1px 2px rgba(22,31,26,.06),0 8px 24px -12px rgba(22,31,26,.18);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0F1512; --surface:#161F19; --surface2:#1E2A22; --ink:#E9ECE4; --ink2:#B4BDB4; --muted:#7F8B82; --line:#293629; --line2:#3A4A3D;
+    --accent:#4FB37F; --accent-ink:#0F1512; --accent-soft:#1B3327;
+    --s-debt:#5A8BDC; --s-credit:#3BAA6E; --s-equity:#C4862A;
+    --u1:#8FB0E6; --u2:#5A8BDC; --u3:#3F66AE; --u4:#2C4A80; --u5:#213858;
+    --good:#3BAA6E; --good-soft:#173324; --warn:#D9A64A; --warn-soft:#3A2E14; --bad:#E06A5E; --bad-soft:#3E1F1B;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.6);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0F1512; --surface:#161F19; --surface2:#1E2A22; --ink:#E9ECE4; --ink2:#B4BDB4; --muted:#7F8B82; --line:#293629; --line2:#3A4A3D;
+  --accent:#4FB37F; --accent-ink:#0F1512; --accent-soft:#1B3327;
+  --s-debt:#5A8BDC; --s-credit:#3BAA6E; --s-equity:#C4862A;
+  --u1:#8FB0E6; --u2:#5A8BDC; --u3:#3F66AE; --u4:#2C4A80; --u5:#213858;
+  --good:#3BAA6E; --good-soft:#173324; --warn:#D9A64A; --warn-soft:#3A2E14; --bad:#E06A5E; --bad-soft:#3E1F1B;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.6);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;height:100%;overflow:hidden}
+body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:"Instrument Sans",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+/* the app owns its own scrolling so the bottom nav stays on screen even inside an embedded frame on iOS */
+#app{position:relative;height:100%;display:flex;flex-direction:column;background:var(--bg)}
+.scroller{flex:1 1 auto;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+h1,h2,h3{font-family:"Bricolage Grotesque","Instrument Sans",ui-sans-serif,system-ui,sans-serif;font-variation-settings:"opsz" 96;text-wrap:balance;margin:0;line-height:1.05;letter-spacing:-.02em}
+h1{font-size:clamp(2.1rem,7.5vw,3.4rem);font-weight:600}
+h2{font-size:clamp(1.55rem,5.5vw,2.2rem);font-weight:600}
+h3{font-size:1.1rem;font-weight:600;letter-spacing:-.01em;line-height:1.2}
+h4{font-family:"Bricolage Grotesque",sans-serif;font-size:.95rem;font-weight:600;margin:0;letter-spacing:-.01em}
+p{margin:0;max-width:62ch}
+.num,.mono{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;font-variant-numeric:tabular-nums}
+.eyebrow{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,summary:focus-visible,[role="switch"]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+a{color:var(--accent)}
+
+/* shell */
+.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top-in{max-width:680px;margin:0 auto;padding:11px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;letter-spacing:-.02em;font-size:1.05rem;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.brand small{font-family:"Instrument Sans",sans-serif;font-weight:500;color:var(--muted);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase}
+.viewname{font-size:.8rem;color:var(--muted);font-weight:600}
+main{max-width:680px;margin:0 auto;padding:0 18px 40px}
+section[hidden]{display:none}
+.bnav{flex:none;z-index:25;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+.bnav-in{max-width:680px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+.bnav button{border:0;background:transparent;padding:8px 4px 8px;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:.68rem;font-weight:600;color:var(--muted);letter-spacing:.02em}
+.bnav button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.bnav button[aria-selected="true"]{color:var(--accent)}
+
+/* primer */
+.step{display:none;padding:28px 0 12px;animation:rise .35s ease both}
+.step.active{display:block}
+@keyframes rise{from{opacity:.4;transform:translateY(6px)}to{opacity:1;transform:none}}
+.step .lede{font-size:1.1rem;color:var(--ink2);margin-top:14px}
+.step h2{margin-top:10px}
+.stack{display:grid;gap:18px;margin-top:22px}
+.callout{border-left:3px solid var(--accent);padding:10px 14px;background:var(--surface);border-radius:0 10px 10px 0}
+.callout .eyebrow{color:var(--accent);margin-bottom:4px}
+.callout p{font-size:.95rem}
+.formula{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:14px 16px;background:var(--surface2);border-radius:12px;font-family:"Bricolage Grotesque",sans-serif;font-size:1.15rem;font-weight:500}
+.formula .op{color:var(--muted);font-weight:300}
+.formula .val{font-family:"JetBrains Mono",monospace;font-size:1rem;color:var(--accent);font-weight:600}
+.hero-num{font-family:"Bricolage Grotesque",sans-serif;font-size:clamp(2.6rem,11vw,4rem);font-weight:600;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
+.hero-sub{color:var(--muted);font-size:.9rem;margin-top:4px}
+.stepnav{position:sticky;bottom:0;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0 10px;background:linear-gradient(to top,var(--bg) 70%,transparent)}
+.stepnav .dots{display:flex;gap:6px}
+.stepnav .dots i{width:6px;height:6px;border-radius:50%;background:var(--line2);display:block;transition:all .3s}
+.stepnav .dots i.on{background:var(--accent);width:18px;border-radius:3px}
+.btn{border:1px solid var(--line2);background:var(--surface);border-radius:999px;padding:10px 18px;font-weight:600;font-size:.92rem;display:inline-flex;align-items:center;gap:8px;transition:transform .15s,background .15s}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.ghost{border-color:transparent;background:transparent;color:var(--ink2)}
+.btn.sm{padding:6px 12px;font-size:.8rem}
+.btn:disabled{opacity:.45;cursor:default}
+.cover{padding-top:40px}
+.cover .cast{margin-top:28px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.cast>div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.cast .k{font-size:.72rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;font-weight:600}
+.cast .v{font-family:"Bricolage Grotesque",sans-serif;font-size:1.35rem;font-weight:600;letter-spacing:-.02em;margin-top:2px}
+.cover .actions{display:flex;gap:10px;margin-top:26px;flex-wrap:wrap}
+
+/* stacked bars */
+.sbar{display:flex;height:34px;border-radius:8px;overflow:hidden;gap:2px}
+.sbar span{display:flex;align-items:center;justify-content:center;font-family:"JetBrains Mono",monospace;font-size:.7rem;color:#fff;overflow:hidden;white-space:nowrap;transition:flex .5s cubic-bezier(.2,.7,.2,1);min-width:0}
+.sbar span.lt{color:var(--ink)}
+.sbar span b{font-weight:500;opacity:.95}
+.legend{display:grid;grid-template-columns:1fr auto;gap:6px 12px;margin-top:12px;font-size:.9rem}
+.legend .lk{display:flex;align-items:center;gap:8px;color:var(--ink2)}
+.legend i{width:10px;height:10px;border-radius:3px;display:inline-block;flex:none}
+.legend .lv{text-align:right;color:var(--ink)}
+.legend .lv small{display:block;color:var(--muted);font-size:.72rem;font-family:"Instrument Sans",sans-serif}
+.legend .tot{border-top:1px solid var(--line);padding-top:6px;font-weight:600;grid-column:1/-1;display:flex;justify-content:space-between}
+
+/* waterfall */
+.wf{display:grid;gap:7px;margin-top:6px}
+.wf .row{display:grid;grid-template-columns:92px 1fr 80px;align-items:center;gap:10px;font-size:.85rem}
+.wf .lab{color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wf .track{position:relative;height:16px;background:var(--surface2);border-radius:4px}
+.wf .bar{position:absolute;top:0;height:100%;border-radius:4px;transition:left .5s cubic-bezier(.2,.7,.2,1),width .5s cubic-bezier(.2,.7,.2,1)}
+.wf .bar.pos{background:var(--s-credit)} .wf .bar.neg{background:var(--bad)} .wf .bar.tot{background:var(--ink)} .wf .bar.debt{background:var(--s-debt)}
+.wf .v{text-align:right;font-size:.8rem}
+.wf .row.total .lab,.wf .row.total .v{font-weight:600;color:var(--ink)}
+.wf .v.neg{color:var(--bad)}
+
+/* gauge */
+.gauge{margin-top:8px;padding-top:26px}
+.gauge .track{position:relative;height:14px;border-radius:7px;background:var(--surface2)}
+.gauge .above{position:absolute;bottom:100%;margin-bottom:6px;transform:translateX(-50%);white-space:nowrap;font-size:.72rem;color:var(--muted);line-height:1.15;text-align:center}
+.gauge .above b{color:var(--ink);font-weight:600}
+.gauge .fill{position:absolute;left:0;top:0;height:100%;border-radius:7px;transition:width .6s cubic-bezier(.2,.7,.2,1),background .3s}
+.gauge .fill.bad{background:var(--bad)} .gauge .fill.warn{background:var(--warn)} .gauge .fill.good{background:var(--good)}
+.gauge .mark{position:absolute;top:-5px;width:2px;height:24px;background:var(--ink);opacity:.55;transform:translateX(-1px)}
+.gauge .mark.req{opacity:1}
+.gauge .ghost{position:absolute;top:2px;width:2px;height:10px;background:var(--muted);transform:translateX(-1px);transition:left .6s}
+.gauge .ticks{position:relative;height:32px;margin-top:8px;font-size:.72rem;color:var(--muted)}
+.gauge .ticks span{position:absolute;transform:translateX(-50%);white-space:nowrap;text-align:center;line-height:1.15}
+.gauge .ticks span b{display:block;color:var(--ink);font-weight:600}
+.gauge .needle{position:absolute;top:-11px;transform:translateX(-50%);transition:left .6s cubic-bezier(.2,.7,.2,1)}
+.gauge .needle i{display:block;width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:8px solid var(--ink)}
+
+/* dashboard */
+.deal-head{padding:24px 0 8px}
+.verdict{position:sticky;top:55px;z-index:15;background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:14px 16px 12px;margin-top:14px}
+.verdict .grid{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:10px;align-items:end}
+.verdict .k{font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.verdict .v{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;letter-spacing:-.03em;font-size:1.45rem;line-height:1.05;margin-top:2px;font-variant-numeric:tabular-nums}
+.verdict .v.big{font-size:2.3rem}
+.verdict .grid.row2{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+.verdict .grid.row2 .v{font-size:1.2rem}
+.verdict .eqc{display:none}
+/* compact form once the strip is stuck to the top while scrolling */
+.verdict.compact{padding:9px 14px 8px;border-radius:12px}
+.verdict.compact .grid{grid-template-columns:1.15fr 1fr 1fr 1fr;gap:8px}
+.verdict.compact .grid.row2,.verdict.compact .gauge,.verdict.compact .gap,.verdict.compact .s{display:none}
+.verdict.compact .eqc{display:block}
+.verdict.compact .v.big{font-size:1.5rem}
+.verdict.compact .v{font-size:1.05rem}
+.verdict.compact .k{font-size:.6rem}
+.verdict .s{font-size:.7rem;color:var(--muted);margin-top:2px;font-variant-numeric:tabular-nums}
+.pill{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:2px 8px;font-size:.66rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.pill.bad{background:var(--bad-soft);color:var(--bad)} .pill.warn{background:var(--warn-soft);color:var(--warn)} .pill.good{background:var(--good-soft);color:var(--good)}
+.pill i{width:6px;height:6px;border-radius:50%;background:currentColor;display:inline-block}
+.verdict .gauge{margin-top:14px}
+.verdict .gap{margin-top:6px;font-size:.8rem;color:var(--ink2);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.verdict .gap b{color:var(--ink)}
+.sec{margin-top:30px}
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:12px}
+.sec-h p{color:var(--muted);font-size:.9rem;margin-top:2px}
+.moves{display:grid;gap:10px}
+.move{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 14px 12px;transition:border-color .3s,background .3s,box-shadow .3s}
+.move .head{display:grid;grid-template-columns:40px 1fr auto;gap:12px;align-items:start}
+.move.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent-soft) 45%,var(--surface))}
+.move.playing{box-shadow:0 0 0 3px var(--accent-soft)}
+.move .ic{width:40px;height:40px;border-radius:10px;background:var(--surface2);display:grid;place-items:center;color:var(--ink2);transition:background .3s,color .3s}
+.move.on .ic{background:var(--accent);color:var(--accent-ink)}
+.move .ic svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.move h3{margin:0}
+.move .tag{font-size:.8rem;color:var(--accent);font-weight:600;margin-top:1px}
+.move .desc{font-size:.88rem;color:var(--ink2);margin-top:6px;max-width:none}
+.move .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.chip{font-family:"JetBrains Mono",monospace;font-size:.72rem;padding:3px 8px;border-radius:6px;background:var(--surface2);color:var(--ink2);white-space:nowrap}
+.chip.up{background:var(--good-soft);color:var(--good)} .chip.dn{background:var(--bad-soft);color:var(--bad)}
+.sw{width:46px;height:28px;border-radius:999px;background:var(--line2);border:0;position:relative;padding:0;transition:background .25s;flex:none}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .25s cubic-bezier(.2,.7,.2,1)}
+.sw[aria-checked="true"]{background:var(--accent)} .sw[aria-checked="true"]::after{transform:translateX(18px)}
+.mathbtn{margin-top:10px;border:0;background:transparent;padding:4px 0;font-size:.82rem;font-weight:600;color:var(--ink2);display:inline-flex;align-items:center;gap:6px}
+.mathbtn i{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--line2);display:grid;place-items:center;font-style:normal;font-size:.9rem;line-height:1;transition:transform .25s}
+.mathbtn[aria-expanded="true"] i{transform:rotate(45deg);border-color:var(--accent);color:var(--accent)}
+.math{display:none;margin-top:12px;padding-top:12px;border-top:1px dashed var(--line);animation:rise .3s ease both}
+.math.open{display:block}
+.math .why{font-size:.88rem;color:var(--ink2);max-width:none;margin-bottom:12px}
+.math h4{margin:12px 0 4px;color:var(--ink)}
+.math h4:first-of-type{margin-top:0}
+.math .tbl{margin-bottom:4px}
+.math .tbl td{font-size:.82rem;padding:5px 2px}
+.math .tbl td:last-child small{font-family:"JetBrains Mono",monospace}
+.math .empty{font-size:.82rem;color:var(--muted);padding:4px 2px}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media (max-width:460px){.two{grid-template-columns:1fr}}
+.kpi{padding:12px 14px;border-radius:12px;background:var(--surface2)}
+.kpi .k{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.kpi .v{font-family:"Bricolage Grotesque",sans-serif;font-size:1.5rem;font-weight:600;letter-spacing:-.02em;margin-top:2px;font-variant-numeric:tabular-nums}
+.three .kpi .v{font-size:1.25rem}
+.kpi .s{font-size:.75rem;color:var(--muted)}
+details{border-top:1px solid var(--line)}
+details:last-of-type{border-bottom:1px solid var(--line)}
+summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;padding:13px 2px;font-weight:600;font-family:"Bricolage Grotesque",sans-serif;font-size:1.05rem;letter-spacing:-.01em;gap:10px}
+summary::-webkit-details-marker{display:none}
+summary .sv{font-family:"JetBrains Mono",monospace;font-size:.85rem;font-weight:500;color:var(--ink2);margin-left:auto}
+summary::after{content:"+";color:var(--muted);font-weight:400;font-size:1.2rem}
+details[open] summary::after{content:"–"}
+.tbl{width:100%;border-collapse:collapse;font-size:.88rem;margin:0 0 14px}
+.tbl td{padding:6px 2px;vertical-align:top;border-top:1px dashed var(--line)}
+.tbl tr:first-child td{border-top:0}
+.tbl td:first-child{color:var(--ink2)}
+.tbl td:last-child{text-align:right;font-family:"JetBrains Mono",monospace;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tbl td:last-child small{display:block;color:var(--muted);font-size:.7rem;font-family:"Instrument Sans",sans-serif;white-space:normal}
+.tbl tr.sub td{font-weight:600;color:var(--ink);border-top:1px solid var(--line2)}
+.tbl tr.neg td:last-child{color:var(--bad)}
+.tbl tr.pos td:last-child{color:var(--good)}
+.dials{display:grid;gap:16px}
+.dial label{display:flex;justify-content:space-between;font-size:.85rem;color:var(--ink2);font-weight:600;margin-bottom:6px}
+.dial label output{font-family:"JetBrains Mono",monospace;color:var(--ink)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.seg{display:flex;background:var(--surface2);border-radius:10px;padding:3px;gap:2px}
+.seg button{flex:1;border:0;background:transparent;border-radius:8px;padding:7px 4px;font-weight:600;font-size:.85rem;color:var(--ink2)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.dial .hint{font-size:.78rem;color:var(--muted);margin-top:6px}
+.notes{font-size:.8rem;color:var(--muted);margin-top:26px;line-height:1.55}
+.notes p{max-width:none}
+.notes p+p{margin-top:6px}
+.tip{position:absolute;left:50%;bottom:78px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:999px;font-size:.85rem;opacity:0;pointer-events:none;transition:all .3s;z-index:30;white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis}
+.tip.show{opacity:1;transform:translateX(-50%)}
+
+/* glossary */
+.search{width:100%;border:1px solid var(--line2);background:var(--surface);border-radius:12px;padding:11px 14px;font:inherit;color:var(--ink);margin:16px 0 14px}
+.gl{display:grid;gap:8px}
+.gl .term{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.gl .term h4{font-size:1rem}
+.gl .term .cat{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:2px}
+.gl .term p{font-size:.88rem;color:var(--ink2);margin-top:4px;max-width:none}
+.gl .term p .num{color:var(--ink)}
+.gl .none{color:var(--muted);font-size:.9rem;padding:20px 0}
+
+/* assumptions */
+.agroup{margin-top:18px}
+.agroup h3{margin-bottom:8px}
+.afields{display:grid;gap:8px}
+.af{display:grid;grid-template-columns:1fr 130px;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 8px 8px 12px}
+.af label{font-size:.85rem;color:var(--ink2);line-height:1.25}
+.af label small{display:block;color:var(--muted);font-size:.72rem}
+.af .in{display:flex;align-items:center;gap:4px;background:var(--surface2);border-radius:8px;padding:0 8px}
+.af .in span{font-size:.75rem;color:var(--muted);font-family:"JetBrains Mono",monospace}
+.af input{width:100%;border:0;background:transparent;padding:8px 2px;font:inherit;font-family:"JetBrains Mono",monospace;font-size:.88rem;color:var(--ink);text-align:right;min-width:0}
+.af input:focus{outline:none}
+.af.changed{border-color:var(--accent)}
+.live{position:sticky;top:55px;z-index:10;display:flex;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 12px;margin-top:14px;box-shadow:var(--shadow);font-size:.78rem;white-space:nowrap}
+.live b{font-family:"JetBrains Mono",monospace;font-weight:600}
+.live .sp{flex:1}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div id="app">
+  <div class="scroller" id="scroller">
+  <header class="top"><div class="top-in">
+    <div class="brand">Stacking the Deal <small>Greenbuild</small></div>
+    <div class="viewname" id="viewname">Primer</div>
+  </div></header>
+
+  <main>
+  <!-- ================= PRIMER ================= -->
+  <section id="view-primer">
+    <div class="step cover active" data-step="0">
+      <div class="eyebrow">A ten-minute primer for people who design buildings</div>
+      <h1 style="margin-top:12px">See your building the way the bank does.</h1>
+      <p class="lede">Every green strategy you already know has a line in a spreadsheet. Learn the three numbers that decide whether a building gets built, then take the spreadsheet apart with design.</p>
+      <div class="cast">
+        <div><div class="k">The building</div><div class="v"><span data-v="units"></span> units</div></div>
+        <div><div class="k">Stories</div><div class="v"><span data-v="floors"></span>, wood frame</div></div>
+        <div><div class="k">Cost to build</div><div class="v num" data-v="tdc"></div></div>
+        <div><div class="k">Interest rate</div><div class="v num" data-v="rate"></div></div>
+      </div>
+      <div class="actions">
+        <button class="btn primary" data-go="1">Start the primer →</button>
+        <button class="btn ghost" data-view="deal">Skip to the deal</button>
+      </div>
+    </div>
+
+    <div class="step" data-step="1">
+      <div class="eyebrow">Lesson 1 of 6 · Uses</div>
+      <h2>Where the money goes</h2>
+      <p class="lede">Before anyone talks about rent or returns, the building is a pile of costs. Underwriters sort that pile into five buckets, then divide by the number of units.</p>
+      <div class="stack">
+        <div>
+          <div class="hero-num num" data-v="tdc"></div>
+          <div class="hero-sub">Total development cost · <span class="num" data-v="tdcUnit"></span> per unit</div>
+        </div>
+        <div class="card"><div class="sbar" id="uses-bar-p"></div><div class="legend" id="uses-leg-p"></div></div>
+        <div class="callout"><div class="eyebrow">Underwriter's eye</div><p>Land, foundation and roof are fixed. Everything in between scales with each unit you add. Hold that thought: it is the whole trick behind the fourth move.</p></div>
+      </div>
+    </div>
+
+    <div class="step" data-step="2">
+      <div class="eyebrow">Lesson 2 of 6 · Sources</div>
+      <h2>Who pays for it</h2>
+      <p class="lede">Two kinds of money build a building. They want different things.</p>
+      <div class="stack">
+        <div class="card"><div class="sbar" id="src-bar-p"></div><div class="legend" id="src-leg-p"></div></div>
+        <div class="two">
+          <div class="kpi"><div class="k">Debt · the bank</div><div class="v num" data-v="rate"></div><div class="s">Cheaper. Impatient: the same payment every month, full building or not, for 30 years.</div></div>
+          <div class="kpi"><div class="k">Equity · the investors</div><div class="v num" data-v="targetIrr"></div><div class="s">Expensive. Patient: paid last, only from what is left, and only if it is there.</div></div>
+        </div>
+        <div class="callout"><div class="eyebrow">Underwriter's eye</div><p>The bank does not lend 70% because it is generous. It lends what the building's income can safely repay. Which means we need to know the income.</p></div>
+      </div>
+    </div>
+
+    <div class="step" data-step="3">
+      <div class="eyebrow">Lesson 3 of 6 · NOI</div>
+      <h2>The building's paycheck</h2>
+      <p class="lede">Net Operating Income is what is left after tenants pay and the building is run, but before the bank gets a dollar. Every line is a design decision.</p>
+      <div class="stack">
+        <div class="formula"><span>Rent</span><span class="op">−</span><span>Vacancy</span><span class="op">−</span><span>Expenses</span><span class="op">=</span><span>NOI</span><span class="val num" data-v="noi"></span></div>
+        <div class="card"><div class="wf" id="wf-p"></div></div>
+        <div class="callout"><div class="eyebrow">Underwriter's eye</div><p>The envelope sets the utility line. The construction type sets the insurance line. The amenities set the vacancy line. You have been writing this spreadsheet your whole career without seeing it.</p></div>
+        <div class="formula"><span>NOI</span><span class="op">÷</span><span>Total cost</span><span class="op">=</span><span>Yield on cost</span><span class="val num" data-v="yoc"></span></div>
+        <p style="font-size:.9rem;color:var(--ink2)">Hold that yield against the <b class="num" data-v="konst"></b> the loan costs every year, interest plus principal. That gap is the whole story of building in 2026.</p>
+      </div>
+    </div>
+
+    <div class="step" data-step="4">
+      <div class="eyebrow">Lesson 4 of 6 · DSCR</div>
+      <h2>The bank's one question</h2>
+      <p class="lede">Debt Service Coverage Ratio: how many times over can the paycheck cover the loan payment? The bank wants a cushion, usually 1.25×, in case rents slip.</p>
+      <div class="stack">
+        <div class="formula"><span>NOI</span><span class="op">÷</span><span>Annual loan payment</span><span class="op">=</span><span>DSCR</span><span class="val num" data-v="dscr"></span></div>
+        <div class="card"><div class="gauge" id="gauge-p"></div></div>
+        <div class="two">
+          <div class="kpi"><div class="k">Loan we need</div><div class="v num" data-v="debt"></div><div class="s"><span data-v="ltcActual"></span> of cost</div></div>
+          <div class="kpi"><div class="k">Loan the bank will make</div><div class="v num" data-v="maxLoan"></div><div class="s">at <span class="num" data-v="dscrReq"></span> coverage</div></div>
+        </div>
+        <div class="callout"><div class="eyebrow">Underwriter's eye</div><p>The building covers its payment, barely. That is not enough. The bank shrinks the loan until coverage hits <span class="num" data-v="dscrReq"></span>, and a <b class="num" data-v="gapAbs"></b> hole opens up that someone has to fill with expensive money.</p></div>
+      </div>
+    </div>
+
+    <div class="step" data-step="5">
+      <div class="eyebrow">Lesson 5 of 6 · Leveraged return</div>
+      <h2>What the investors earn</h2>
+      <p class="lede">After the bank is paid, whatever is left belongs to equity. Divide that by what equity put in and you have the leveraged return, the cash-on-cash yield. Over fifteen years, with rent growth and a sale, it becomes an IRR.</p>
+      <div class="stack">
+        <div class="formula"><span>(NOI</span><span class="op">−</span><span>Loan payment)</span><span class="op">÷</span><span>Equity</span><span class="op">=</span><span class="val num" data-v="coc"></span></div>
+        <div class="three">
+          <div class="kpi"><div class="k">Left for investors</div><div class="v num" data-v="cf"></div><div class="s">per year</div></div>
+          <div class="kpi"><div class="k">Investors put in</div><div class="v num" data-v="equity"></div><div class="s"><span data-v="eqShare"></span> of cost</div></div>
+          <div class="kpi"><div class="k">15-yr IRR</div><div class="v num" data-v="irr15"></div><div class="s">want <span class="num" data-v="targetIrr"></span></div></div>
+        </div>
+        <div class="callout"><div class="eyebrow">Underwriter's eye</div><p>Leverage magnifies. When a building yields more than its loan costs, borrowing lifts the return. When it yields less, <span class="num" data-v="yoc"></span> against a <span class="num" data-v="konst"></span> loan, every borrowed dollar drags it down. That is negative leverage, and it is why a perfectly good building can be unbuildable. Investors want 5% or more in cash in year one and a <span class="num" data-v="targetIrr"></span> IRR over the hold.</p></div>
+      </div>
+    </div>
+
+    <div class="step" data-step="6">
+      <div class="eyebrow">Lesson 6 of 6 · The verdict</div>
+      <h2>This building dies in underwriting, not in design review.</h2>
+      <p class="lede">Nothing about it is wrong. It simply yields <span class="num" data-v="yoc"></span> in a <span class="num" data-v="konst"></span> world. Three numbers, one verdict.</p>
+      <div class="stack">
+        <div class="three">
+          <div class="kpi"><div class="k">NOI</div><div class="v num" data-v="noi"></div><div class="s">the paycheck</div></div>
+          <div class="kpi"><div class="k">DSCR</div><div class="v num" data-v="dscr"></div><div class="s"><span class="pill" id="p-pill"><i></i>Fails</span></div></div>
+          <div class="kpi"><div class="k">15-yr IRR</div><div class="v num" data-v="irr15"></div><div class="s">want <span class="num" data-v="targetIrr"></span></div></div>
+        </div>
+        <div class="callout"><div class="eyebrow">Now the good part</div><p>Every move that follows is something you already know how to draw. Watch what each one does to these numbers. Stack them, and the bank says yes.</p></div>
+        <div><button class="btn primary" data-view="deal">Open the deal →</button></div>
+      </div>
+    </div>
+
+    <nav class="stepnav">
+      <button class="btn ghost" id="prev">← Back</button>
+      <div class="dots" id="dots"></div>
+      <button class="btn" id="next">Next →</button>
+    </nav>
+  </section>
+
+  <!-- ================= DASHBOARD ================= -->
+  <section id="view-deal" hidden>
+    <div class="deal-head">
+      <div class="eyebrow">The Deal</div>
+      <h2 style="margin-top:6px" id="deal-title">Stack the moves until the bank says yes.</h2>
+      <p class="lede" id="deal-sub" style="margin-top:8px;font-size:.95rem"></p>
+    </div>
+
+    <div class="verdict">
+      <div class="grid">
+        <div><div class="k">DSCR <span class="pill bad" id="v-pill"><i></i>Fails</span></div><div class="v big num" id="v-dscr">1.12×</div><div class="s">bank wants <span class="num" id="v-req">1.25×</span> · we size to <span class="num" id="v-size">1.30×</span></div></div>
+        <div><div class="k">NOI</div><div class="v num" id="v-noi">$2.2M</div><div class="s" id="v-noi-d"></div></div>
+        <div><div class="k">15-yr IRR</div><div class="v num" id="v-irr">10%</div><div class="s" id="v-irr-d"></div></div>
+        <div class="eqc"><div class="k">Equity</div><div class="v num" id="v-eq2">$12M</div></div>
+      </div>
+      <div class="grid row2">
+        <div><div class="k">Total cost</div><div class="v num" id="v-tdc">$38M</div><div class="s" id="v-tdc-d"></div></div>
+        <div><div class="k">Equity</div><div class="v num" id="v-eq">$12M</div><div class="s" id="v-eq-d"></div></div>
+        <div><div class="k">Cash yield</div><div class="v num" id="v-coc">2%</div><div class="s" id="v-coc-d"></div></div>
+      </div>
+      <div class="gauge" id="gauge-d"></div>
+      <div class="gap"><span id="v-gap"></span><span id="v-units" class="num"></span></div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-h"><div><h3>Design moves</h3><p>Chips show what each move does to the current stack. Open the math to see every line that changes.</p></div></div>
+      <div class="toolbar"><button class="btn primary" id="play">▶ Stack it in order</button><button class="btn" id="clear">Clear all</button></div>
+      <div class="moves" id="moves-design"></div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-h"><div><h3>Capital stack moves</h3><p>Not design, but the deals that pay for design. Both take longer to approve, and the model charges for the wait.</p></div></div>
+      <div class="moves" id="moves-capital"></div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-h"><div><h3>The capital stack</h3><p>Tax credit equity pushes the loan down; more units push the whole stack up.</p></div></div>
+      <div class="card">
+        <div class="eyebrow" style="margin-bottom:8px">Uses · where it goes</div>
+        <div class="sbar" id="uses-bar-d"></div><div class="legend" id="uses-leg-d"></div>
+        <div class="eyebrow" style="margin:18px 0 8px">Sources · who pays</div>
+        <div class="sbar" id="src-bar-d"></div><div class="legend" id="src-leg-d"></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-h"><div><h3>The paycheck, and the bank's bite</h3><p>From gross rent to what the investors keep in year one.</p></div></div>
+      <div class="card"><div class="wf" id="wf-d"></div></div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-h"><div><h3>Full proforma</h3><p>Every number the dashboard is built from.</p></div></div>
+      <details><summary>Development budget <span class="sv" id="s-tdc"></span></summary><table class="tbl" id="t-budget"></table></details>
+      <details><summary>Sources of funds <span class="sv" id="s-src"></span></summary><table class="tbl" id="t-src"></table></details>
+      <details><summary>Income <span class="sv" id="s-inc"></span></summary><table class="tbl" id="t-inc"></table></details>
+      <details><summary>Operating expenses <span class="sv" id="s-opex"></span></summary><table class="tbl" id="t-opex"></table></details>
+      <details><summary>Debt and year-one returns <span class="sv" id="s-ret"></span></summary><table class="tbl" id="t-ret"></table></details>
+      <details><summary>Fifteen-year hold and IRR <span class="sv" id="s-irr"></span></summary><table class="tbl" id="t-irr"></table></details>
+    </div>
+
+    <div class="sec">
+      <div class="sec-h"><div><h3>Underwriter's dials</h3><p>What the room cannot control, but should feel. Everything else is under Inputs.</p></div></div>
+      <div class="card dials">
+        <div class="dial"><label>Interest rate <output id="o-rate">6.25%</output></label><input type="range" id="d-rate" min="4.5" max="8" step="0.25" value="6.25"><div class="hint">30-year amortization. Every quarter point moves the loan constant, and the constant is the number the yield has to beat.</div></div>
+        <div class="dial"><label>Coverage the bank requires <output id="o-req">1.25×</output></label><input type="range" id="d-req" min="1.15" max="1.35" step="0.05" value="1.25"><div class="hint">Agency lenders usually ask 1.20 to 1.25×. Banks under stress ask more. The cushion we size to, and the loan-to-value cap, are under Inputs.</div></div>
+        <div class="dial"><label>Investment tax credit on geothermal and solar</label><div class="seg" id="d-itc"><button aria-pressed="false" data-itc="0.3">30%</button><button aria-pressed="false" data-itc="0.4">40%</button><button aria-pressed="true" data-itc="0.5">50%</button></div><div class="hint">30% base, +10% domestic content, +10% energy community. Sold to a credit buyer at 92¢ on the dollar.</div></div>
+      </div>
+    </div>
+
+    <div class="notes">
+      <p><b>About the numbers.</b> This is a teaching proforma, not a pricing model. Costs, rents and rates are plausible 2026 figures for a mid-rise multifamily building in a mid-sized U.S. market and are meant to be argued with; change any of them under Inputs. Credit percentages and eligibility follow the Inflation Reduction Act as amended and the federal and state historic and housing credit programs in general terms. Confirm current law, placed-in-service deadlines and program rules with tax counsel before underwriting a real deal.</p>
+      <p>Simplifications worth knowing: every deal starts at the loan-to-cost cap with the remainder as equity; credit proceeds first displace the loan, and once the bank's coverage and loan-to-value tests pass the loan is sized to the cushion and further credits displace equity instead; a bridge loan on credit equity is charged during construction and fed back into cost and basis; the federal historic credit is actually claimed over five years and housing credits over ten, which is why they are priced below face; the model does not reduce historic basis for the energy credit or coordinate the two; the fifteen-year IRR treats equity as invested at the start, with operations beginning after construction and any approval delay.</p>
+    </div>
+  </section>
+
+  <!-- ================= GLOSSARY ================= -->
+  <section id="view-glossary" hidden>
+    <div class="deal-head">
+      <div class="eyebrow">Glossary</div>
+      <h2 style="margin-top:6px">The words the bank uses.</h2>
+      <p class="lede" style="margin-top:10px">Every term on the dashboard, in plain language, with the deal's live number where there is one.</p>
+    </div>
+    <input class="search" id="gl-search" type="search" placeholder="Search terms, e.g. DSCR, basis, cap rate" aria-label="Search glossary">
+    <div class="gl" id="gl"></div>
+  </section>
+
+  <!-- ================= ASSUMPTIONS ================= -->
+  <section id="view-inputs" hidden>
+    <div class="deal-head">
+      <div class="eyebrow">Inputs</div>
+      <h2 style="margin-top:6px">Make it your building.</h2>
+      <p class="lede" style="margin-top:10px">Every assumption behind the model. Change a number and the primer, the dashboard and the math panels all update. Your changes stay in this browser.</p>
+    </div>
+    <div class="live"><span>DSCR <b id="l-dscr"></b></span><span>NOI <b id="l-noi"></b></span><span>IRR <b id="l-irr"></b></span><span class="sp"></span><button class="btn sm" id="reset" title="Reset every input to its default">Reset</button></div>
+    <div id="afields"></div>
+  </section>
+  </main>
+  </div>
+
+  <nav class="bnav" role="tablist"><div class="bnav-in">
+    <button role="tab" data-view="primer" aria-selected="true"><svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5V5.5M8 7h8M8 11h8"/></svg>Primer</button>
+    <button role="tab" data-view="deal" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 12l9 5 9-5"/><path d="M3 16l9 5 9-5"/></svg>The Deal</button>
+    <button role="tab" data-view="glossary" aria-selected="false"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/><path d="M8.5 13.5l2.5-6 2.5 6M9.3 11.6h3.4"/></svg>Glossary</button>
+    <button role="tab" data-view="inputs" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 12h3M11 12h9M4 17h12M20 17h0"/><circle cx="16" cy="7" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="18" cy="17" r="2"/></svg>Inputs</button>
+  </div></nav>
+  <div class="tip" id="tip"></div>
+</div>
+
+<script>
+/* ================= ENGINE ================= */
+const A = {
+  unitsPerFloor:24, floorsBase:5, addFloors:3,
+  land:3000000, acquisition:5500000, foundation:2400000, foundationTallFactor:1.2, foundationHistoricFactor:0.6, roof:900000,
+  structureWood:100000, structureNC:112000, structureRehab:110000, phPremium:7500,
+  mepOther:23000, hvacConv:27000, hvacGeo:40000, interiors:60000,
+  solarCost:825000, gardensCost:450000, softPct:0.17, feePct:0.04, contPct:0.03,
+  rent:2200, other:100, utilFee:175, vacancy:0.05, concessions:0.02, gardensVacancyCut:0.02, gardensConcessionCut:0.01,
+  affordableShare:0.40, affordableRent:1350, affordableVacancy:0.02,
+  taxes:2000, insWood:1100, insNC:500, rm:700, payrollFixed:90000, payrollUnit:450, mgmt:0.035, mkt:300, reserves:300,
+  gardensOpex:25000, lihtcCompliance:200, lihtcAssetMgmt:15000,
+  inUnitEnergy:1800, commonEnergy:600, geoFactor:0.70, phFactor:0.60, solarKwh:390000, retail:0.15, exportRate:0.05,
+  rate:0.0625, amort:30, dscrReq:1.25, sizeDscr:1.30, ltc:0.70, ltv:0.70, valueCap:0.0575, teBondDiscount:0.005,
+  bridgeRate:0.09, bridgeFee:0.01, bridgeDraw:0.5,
+  itc:0.50, creditPrice:0.92, fedHtc:0.20, fedHtcPrice:0.88, stateHtc:0.25, stateHtcPrice:0.85,
+  lihtcRate:0.04, lihtcYears:10, lihtcPrice:0.85, basisBoost:0,
+  buildMonths:24, htcMonths:9, htcFees:175000, lihtcMonths:12, lihtcFees:350000, carryRate:0.07,
+  holdYears:15, rentGrowth:0.03, expenseGrowth:0.025, exitCap:0.0575, saleCost:0.02, targetIrr:0.15,
+};
+function irr(cfs){
+  const npv=r=>cfs.reduce((s,c)=>s+c.v/Math.pow(1+r,c.t),0);
+  let lo=-0.95,hi=1.0; if(npv(lo)*npv(hi)>0)return NaN;
+  for(let i=0;i<80;i++){const mid=(lo+hi)/2;(npv(lo)*npv(mid)<=0)?hi=mid:lo=mid;}
+  return (lo+hi)/2;
+}
+function calc(m,a){
+  const existingUnits=a.unitsPerFloor*a.floorsBase, addUnits=m.tall?a.unitsPerFloor*a.addFloors:0;
+  const units=existingUnits+addUnits, floors=a.floorsBase+(m.tall?a.addFloors:0), existingShare=existingUnits/units;
+  // ---- uses
+  const land=m.htc?a.acquisition:a.land;
+  const foundation=a.foundation*(m.tall?a.foundationTallFactor:1)*(m.htc?a.foundationHistoricFactor:1);
+  const shellExisting=(m.htc?a.structureRehab:(m.tall?a.structureNC:a.structureWood))+(m.ph?a.phPremium:0);
+  const shellAdd=a.structureNC+(m.ph?a.phPremium:0);
+  const structure=existingUnits*shellExisting+addUnits*shellAdd;
+  const roof=a.roof+(m.gardens?a.gardensCost:0);
+  const hvac=units*(m.geo?a.hvacGeo:a.hvacConv), mep=units*a.mepOther+hvac;
+  const solar=m.solar?a.solarCost:0, interiors=units*a.interiors;
+  const hard=foundation+structure+roof+mep+solar+interiors;
+  const soft=hard*a.softPct, fee=(hard+land)*a.feePct, cont=hard*a.contPct;
+  const delayMonths=Math.max(m.htc?a.htcMonths:0,m.lihtc?a.lihtcMonths:0);
+  const approvalFees=(m.htc?a.htcFees:0)+(m.lihtc?a.lihtcFees:0);
+  const carry=land*a.carryRate*delayMonths/12;
+  const tdcBase=land+hard+soft+fee+cont+approvalFees+carry;
+  // ---- income
+  const affUnits=m.lihtc?Math.round(units*a.affordableShare):0, mktUnits=units-affUnits;
+  const gprMkt=mktUnits*a.rent*12, gprAff=affUnits*a.affordableRent*12, gpr=gprMkt+gprAff;
+  const otherInc=units*a.other*12, utilFee=m.ph?mktUnits*a.utilFee*12:0;
+  const vacM=a.vacancy-(m.gardens?a.gardensVacancyCut:0), conc=a.concessions-(m.gardens?a.gardensConcessionCut:0);
+  const grossMkt=gprMkt+utilFee+otherInc*(mktUnits/units), grossAff=gprAff+otherInc*(affUnits/units), gross=grossMkt+grossAff;
+  const vacLoss=grossMkt*vacM+grossAff*Math.min(vacM,a.affordableVacancy), concLoss=grossMkt*conc;
+  const vac=vacLoss/gross;
+  const egi=gross-vacLoss-concLoss;
+  // ---- energy
+  const ef=(m.geo?a.geoFactor:1)*(m.ph?a.phFactor:1);
+  const landlordEnergy=units*(a.commonEnergy+(m.ph?a.inUnitEnergy:0))*ef;
+  const solarVal=m.solar?a.solarKwh*a.retail:0, solarOffset=Math.min(solarVal,landlordEnergy);
+  const solarExport=m.solar?(solarVal-solarOffset)*(a.exportRate/a.retail):0;
+  const utilities=landlordEnergy-solarOffset;
+  // ---- opex
+  const taxes=units*a.taxes, insurance=units*(m.tall?a.insNC:a.insWood), rm=units*a.rm;
+  const payroll=a.payrollFixed+units*a.payrollUnit, mgmt=egi*a.mgmt, mkt=units*a.mkt, res=units*a.reserves;
+  const gardens=m.gardens?a.gardensOpex:0, compliance=m.lihtc?affUnits*a.lihtcCompliance+a.lihtcAssetMgmt:0;
+  const opex=taxes+insurance+utilities+rm+payroll+mgmt+mkt+res+gardens+compliance;
+  const noi=egi+solarExport-opex;
+  // ---- credits, with the bridge loan on credit equity fed back into cost and basis
+  const geoCredit=m.geo?hvac*a.itc:0, solarCredit=m.solar?solar*a.itc:0;
+  const itcCash=(geoCredit+solarCredit)*a.creditPrice;
+  let bridgeCost=0,tdc,qre,fedHtc,stateHtc,htcCash,eligibleBasis,qualifiedBasis,lihtcAnnual,lihtcTotal,lihtcCash,credits;
+  for(let i=0;i<8;i++){
+    tdc=tdcBase+bridgeCost;
+    qre=m.htc?(hard-solar-(m.gardens?a.gardensCost:0)+soft+fee+cont+bridgeCost)*existingShare:0;
+    fedHtc=qre*a.fedHtc;stateHtc=qre*a.stateHtc;htcCash=fedHtc*a.fedHtcPrice+stateHtc*a.stateHtcPrice;
+    eligibleBasis=m.lihtc?(tdc-land-carry)*(1+a.basisBoost):0;
+    qualifiedBasis=eligibleBasis*(affUnits/units||0);
+    lihtcAnnual=qualifiedBasis*a.lihtcRate;lihtcTotal=lihtcAnnual*a.lihtcYears;lihtcCash=lihtcTotal*a.lihtcPrice;
+    credits=itcCash+htcCash+lihtcCash;
+    const nb=credits*(a.bridgeRate*(a.buildMonths/12)*a.bridgeDraw+a.bridgeFee);
+    if(Math.abs(nb-bridgeCost)<1){bridgeCost=nb;tdc=tdcBase+bridgeCost;break;}
+    bridgeCost=nb;
+  }
+  const creditsFace=geoCredit+solarCredit+fedHtc+stateHtc+lihtcTotal;
+  // ---- debt sizing: the bank tests coverage, LTV and LTC; credits displace debt until the tests pass,
+  //      then the loan is sized to the cushion and every further credit dollar shrinks equity
+  const rate=a.rate-(m.lihtc?a.teBondDiscount:0);
+  const r=rate/12, n=a.amort*12, konst=12*r/(1-Math.pow(1+r,-n));
+  const value=Math.max(noi,0)/a.valueCap, ltvLoan=value*a.ltv, ltcLoan=tdc*a.ltc, equityFull=tdc*(1-a.ltc);
+  const covLoan=Math.max(noi,0)/a.dscrReq/konst, cushionLoan=Math.max(noi,0)/a.sizeDscr/konst;
+  const maxLoan=Math.min(covLoan,ltvLoan);
+  const debtNeeded=ltcLoan-credits;
+  let debt,equity,sizing,surplus=0;
+  if(debtNeeded>maxLoan){debt=debtNeeded;equity=equityFull;sizing='fail';}
+  else{
+    debt=Math.max(Math.min(ltcLoan,ltvLoan,cushionLoan),0);equity=tdc-credits-debt;
+    sizing=debt===cushionLoan?'coverage':debt===ltvLoan?'ltv':'ltc';
+    if(equity<0){equity=0;debt=Math.max(tdc-credits,0);surplus=Math.max(credits-tdc,0);sizing='credits';}
+  }
+  const eqShare=equity/tdc;
+  const ds=debt*konst, dscr=ds>0?noi/ds:Infinity, cf=noi-ds, coc=equity>0?cf/equity:NaN, yoc=noi/tdc;
+  const gap=debt-maxLoan, ltvActual=value>0?debt/value:NaN;
+  // ---- hold and IRR
+  const T=(a.buildMonths+delayMonths)/12, H=a.holdYears;
+  const cfs=[{t:0,v:-equity}];
+  const inc0=egi+solarExport;
+  for(let k=1;k<=H;k++){cfs.push({t:T+k,v:inc0*Math.pow(1+a.rentGrowth,k-1)-opex*Math.pow(1+a.expenseGrowth,k-1)-ds});}
+  const noiExit=inc0*Math.pow(1+a.rentGrowth,H)-opex*Math.pow(1+a.expenseGrowth,H);
+  const bal=debt*((Math.pow(1+r,n)-Math.pow(1+r,H*12))/(Math.pow(1+r,n)-1));
+  const exitValue=noiExit/a.exitCap, saleNet=exitValue*(1-a.saleCost)-bal;
+  cfs[cfs.length-1].v+=saleNet;
+  const opCash=cfs.slice(1).reduce((s,c)=>s+c.v,0)-saleNet;
+  const irr15=equity>0?irr(cfs):NaN, profit=cfs.reduce((s,c)=>s+c.v,0), multiple=equity>0?(profit+equity)/equity:NaN;
+  return {units,floors,existingUnits,addUnits,affUnits,mktUnits,land,foundation,structure,roof,mep,hvac,solar,interiors,hard,soft,fee,cont,approvalFees,carry,bridgeCost,delayMonths,tdc,tdcUnit:tdc/units,
+    geoCredit,solarCredit,itcCash,qre,fedHtc,stateHtc,htcCash,eligibleBasis,qualifiedBasis,lihtcAnnual,lihtcTotal,lihtcCash,creditsFace,credits,equity,equityFull,eqShare,sizing,debt,surplus,ltcActual:debt/tdc,ltcLoan,
+    value,ltvLoan,ltvActual,covLoan,cushionLoan,
+    gprMkt,gprAff,gpr,otherInc,utilFee,vac,vacM,conc,gross,vacLoss,concLoss,egi,ef,landlordEnergy,solarOffset,solarExport,utilities,
+    taxes,insurance,rm,payroll,mgmt,mkt,res,gardens,compliance,opex,opexUnit:opex/units,noi,rate,konst,ds,dscr,cf,coc,yoc,maxLoan,gap,gapAbs:Math.abs(gap),dscrReq:a.dscrReq,sizeDscr:a.sizeDscr,targetIrr:a.targetIrr,
+    T,irr15,profit,multiple,saleNet,bal,noiExit,exitValue,opCash,H};
+}
+
+/* ================= FORMAT ================= */
+const fM=v=>{if(!isFinite(v))return '∞';const s=v<0?'−':'';v=Math.abs(v);return v>=1e6?s+'$'+(v/1e6).toFixed(v>=1e7?1:2)+'M':v>=1e3?s+'$'+Math.round(v/1e3)+'k':s+'$'+Math.round(v)};
+const f$=v=>(v<0?'−':'')+'$'+Math.round(Math.abs(v)).toLocaleString('en-US');
+const fP=(v,d=1)=>isFinite(v)?(v*100).toFixed(d)+'%':'n/a';
+const fX=v=>isFinite(v)?v.toFixed(2)+'×':'∞';
+const sg=v=>v>=0?'+':'−';
+const FMT={tdc:fM,tdcUnit:f$,rate:v=>fP(v,2),noi:fM,yoc:v=>fP(v,2),konst:v=>fP(v,2),dscr:fX,debt:fM,maxLoan:fM,dscrReq:fX,gapAbs:fM,coc:v=>fP(v,1),cf:fM,equity:fM,irr15:v=>fP(v,1),targetIrr:v=>fP(v,0),units:v=>v,floors:v=>v,eqShare:v=>fP(v,0),ltcActual:v=>fP(v,0)};
+
+/* ================= STATE ================= */
+const state={moves:{geo:false,solar:false,ph:false,tall:false,gardens:false,htc:false,lihtc:false},a:{...A},step:0,view:'primer',open:{}};
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const base=()=>calc({},state.a), cur=()=>calc(state.moves,state.a);
+const pc=v=>Math.round(v*100)+'%';
+
+const MOVES=[
+ {id:'geo',kind:'design',name:'Geothermal heat pumps',tag:'A tax credit that replaces debt',
+  desc:a=>`Ground loops and heat pumps replace gas boilers and rooftop units. The system earns a ${pc(a.itc)} investment tax credit, sold for cash that displaces the loan. Building energy drops ${pc(1-a.geoFactor)}.`,
+  why:(a,w)=>`The geothermal system costs ${f$(a.hvacGeo)} per unit against ${f$(a.hvacConv)} for conventional HVAC, so the premium is ${f$(a.hvacGeo-a.hvacConv)} per unit before soft costs, fee and contingency ride on top. The whole system, not just the premium, is eligible for the investment tax credit: ${pc(a.itc)} × ${fM(w.hvac)} = ${fM(w.geoCredit)} of credit, sold to a credit buyer at ${Math.round(a.creditPrice*100)}¢ for ${fM(w.geoCredit*a.creditPrice)} of cash at closing. Because the credit exceeds the premium, the loan gets smaller even though the building costs more. Energy use falls to ${pc(w.ef)} of baseline; only the landlord-paid share shows up in NOI until the Passive House move puts the whole utility bill on the landlord's side.`,
+  icon:'<svg viewBox="0 0 24 24"><path d="M4 20V9m0 0c0-3 2-5 5-5s5 2 5 5v6c0 2 1 3 3 3s3-1 3-3V4"/><path d="M4 9c0 3 2 5 5 5s5-2 5-5"/></svg>'},
+ {id:'solar',kind:'design',name:'Rooftop solar',tag:'Cuts the utility line',
+  desc:a=>`A ${Math.round(a.solarKwh/1300)} kW array on the roof and parking canopy. Power offsets the landlord’s bill first at retail; the surplus sells to the grid. It earns the same credit.`,
+  why:(a,w)=>`The array costs ${fM(a.solarCost)} and produces ${a.solarKwh.toLocaleString()} kWh a year, worth ${fM(a.solarKwh*a.retail)} at the ${Math.round(a.retail*100)}¢ retail rate. It first offsets whatever electricity the landlord is paying for (${fM(w.solarOffset)} this year); anything left is exported at ${Math.round(a.exportRate*100)}¢ and shows up as income (${fM(w.solarExport)}). The roof is a fixed size, so adding floors does not add panels, but it does add landlord-paid load for the panels to offset at full retail value. The credit is ${pc(a.itc)} × ${fM(w.solar)} = ${fM(w.solarCredit)}, sold at ${Math.round(a.creditPrice*100)}¢.`,
+  icon:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg>'},
+ {id:'ph',kind:'design',name:'Passive House envelope',tag:'Landlord pays the utilities, then bills them back',
+  desc:a=>`Triple glazing, airtightness and balanced ventilation for ${f$(a.phPremium)} a unit. Energy drops another ${pc(1-a.phFactor)}, so the landlord takes over the utility bill and charges a market-rate ${f$(a.utilFee)} utility fee. The spread is new NOI.`,
+  why:(a,w)=>`The envelope premium is ${f$(a.phPremium)} per unit, about ${pc(a.phPremium/a.structureWood)} of the structure and envelope line. On its own that lowers the tenant's bill, which the landlord never sees. The business move is to flip who pays: the landlord takes on the whole building's energy, ${f$(a.inUnitEnergy+a.commonEnergy)} per unit at baseline, now cut to ${pc(w.ef)} of that, and charges every market-rate unit a flat ${f$(a.utilFee)} a month utility fee, roughly what a tenant pays elsewhere. Fee in, smaller bill out; the difference is NOI, and management takes its 3.5% of the new revenue. Affordable units, if any, are exempt because their rent cap already includes utilities.`,
+  icon:'<svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M7.5 12v6M16.5 12v6"/><path d="M10 20v-5h4v5"/></svg>'},
+ {id:'tall',kind:'design',name:a=>`Non-combustible, ${a.addFloors} more floor${a.addFloors===1?'':'s'}`,tag:'Same land, roof and foundation',
+  desc:a=>`Steel and concrete instead of wood lets the building go to ${a.floorsBase+a.addFloors} stories: ${a.unitsPerFloor*a.addFloors} more units over the same land, roof and a slightly heavier foundation. Insurance falls from ${f$(a.insWood)} to ${f$(a.insNC)} per unit.`,
+  why:(a,w)=>`Non-combustible structure costs ${f$(a.structureNC)} per unit against ${f$(a.structureWood)} for wood, but it lifts the height limit. ${a.unitsPerFloor*a.addFloors} more units are built on land, roof and site work that are already paid for; the foundation grows ${pc(a.foundationTallFactor-1)}. Cost per unit falls to ${f$(w.tdcUnit)}. On the income side, every fixed expense (payroll, the roof, the lobby) is spread over ${w.units} units instead of ${w.existingUnits}, and insurers price a concrete building at ${f$(a.insNC)} per unit instead of ${f$(a.insWood)}. Yield on cost rises because revenue scaled with units and cost did not.`,
+  icon:'<svg viewBox="0 0 24 24"><path d="M6 21V5l6-3 6 3v16"/><path d="M3 21h18"/><path d="M9 8h2M13 8h2M9 12h2M13 12h2M9 16h2M13 16h2"/></svg>'},
+ {id:'gardens',kind:'design',name:'Rooftop gardens',tag:'Fills the building faster',
+  desc:a=>`Productive gardens and an outdoor room on the roof. An amenity nobody nearby offers: vacancy drops ${Math.round(a.gardensVacancyCut*100)} points and concessions fall ${Math.round(a.gardensConcessionCut*100)} point.`,
+  why:(a,w)=>`The gardens cost ${fM(a.gardensCost)} to build and ${fM(a.gardensOpex)} a year to keep. What they buy is speed: a distinctive amenity leases faster and keeps tenants longer, so physical vacancy falls from ${pc(a.vacancy)} to ${pc(a.vacancy-a.gardensVacancyCut)} and the free-month concessions the market demands fall from ${pc(a.concessions)} to ${pc(a.concessions-a.gardensConcessionCut)}. Those percentages apply to the whole rent roll, which is why a small roof project moves a large NOI line.`,
+  icon:'<svg viewBox="0 0 24 24"><path d="M12 21c0-6 2-11 8-13-1 6-3 10-8 13z"/><path d="M12 21c0-5-2-9-7-11 1 5 3 8 7 11z"/><path d="M12 21v-4"/></svg>'},
+ {id:'htc',kind:'capital',name:'Historic building',tag:`Federal and state historic tax credits`,
+  desc:a=>`Buy and restore an existing historic building instead of building the shell. Qualified rehabilitation costs earn a ${pc(a.fedHtc)} federal credit and a ${pc(a.stateHtc)} state credit. Approvals add ${a.htcMonths} months, consultants and land carry.`,
+  why:(a,w)=>`Acquisition of the historic shell is ${fM(a.acquisition)} instead of ${fM(a.land)} for land, and restoring masonry, windows and hazardous materials costs ${f$(a.structureRehab)} per unit, more than new wood framing. In exchange, Qualified Rehabilitation Expenditures, the hard and soft costs of the rehab excluding acquisition, site work, solar and any new addition, come to ${fM(w.qre)}. The federal credit is ${pc(a.fedHtc)} of that (${fM(w.fedHtc)}), claimed over five years and so priced at ${Math.round(a.fedHtcPrice*100)}¢; the state credit is ${pc(a.stateHtc)} (${fM(w.stateHtc)}) at ${Math.round(a.stateHtcPrice*100)}¢. Together they bring ${fM(w.htcCash)} of cash into the deal. The price of admission is time: Part 1 and Part 2 approvals from the State Historic Preservation Office and the National Park Service add ${a.htcMonths} months, ${fM(a.htcFees)} in consultants and fees, and ${fM(w.carry)} of carry on the building while you wait. That delay also pushes every year of cash flow out, which is why the IRR moves less than the coverage ratio does.${w.addUnits?' With the tall move on, the added floors are treated as a non-historic addition and excluded from QRE.':''}`,
+  icon:'<svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V10M19 21V10M9 21v-6h6v6"/><path d="M3 10l9-6 9 6z"/><path d="M8 13v4M16 13v4"/></svg>'},
+ {id:'lihtc',kind:'capital',name:'Mixed income, 4% housing credits',tag:a=>`${Math.round(a.affordableShare*100)}% of units at 60% of area median income`,
+  desc:a=>`Restrict ${pc(a.affordableShare)} of the units to households at 60% of AMI, finance with tax-exempt bonds, and earn ten years of 4% Low-Income Housing Tax Credits. Approvals add ${a.lihtcMonths} months, application and bond costs, and land carry.`,
+  why:(a,w)=>`${w.affUnits} units rent at the 60% AMI cap of ${f$(a.affordableRent)} a month instead of ${f$(a.rent)}, so gross rent falls by ${fM(w.affUnits*(a.rent-a.affordableRent)*12)} a year. Those units lease from a waiting list, so their vacancy is ${pc(a.affordableVacancy)}, and they do not pay a separate utility fee because the rent cap already covers utilities. Eligible basis is the depreciable cost of the building, ${fM(w.eligibleBasis)} (everything except land and carry), and the applicable fraction is the affordable share, giving qualified basis of ${fM(w.qualifiedBasis)}. The credit is ${fP(a.lihtcRate,1)} of that every year for ${a.lihtcYears} years: ${fM(w.lihtcAnnual)} × ${a.lihtcYears} = ${fM(w.lihtcTotal)}, which an investor buys for ${Math.round(a.lihtcPrice*100)}¢ on the dollar, ${fM(w.lihtcCash)}. Because the credits come with tax-exempt bonds, the loan is ${fP(a.teBondDiscount,2)} cheaper. Compliance adds ${f$(a.lihtcCompliance)} per affordable unit and ${fM(a.lihtcAssetMgmt)} a year. Approvals take ${a.lihtcMonths} months and ${fM(a.lihtcFees)} in application, market study and bond costs, plus ${fM(w.carry)} of carry. The trade is plain: less NOI for a much smaller loan.`,
+  icon:'<svg viewBox="0 0 24 24"><path d="M3 21h18"/><path d="M5 21V8l4-3 4 3v13"/><path d="M13 21V11l3-2 3 2v10"/><path d="M8 11h2M8 15h2M16 14h1M16 17h1"/></svg>'},
+];
+const USES=[['land','Land or acquisition','--u1'],['hard','Hard costs','--u2'],['soft','Soft costs','--u3'],['fee','Developer fee','--u4'],['cont','Contingency, approvals, bridge','--u5']];
+const SRC=[['debt','Senior loan','--s-debt'],['credits','Tax credit equity','--s-credit'],['equity','Investor equity','--s-equity']];
+const BUDGET_LINES=[['land','Land or acquisition'],['foundation','Foundation and site'],['structure','Structure and envelope'],['roof','Roof'],['mep','Mechanical, electrical, plumbing'],['solar','Solar array'],['interiors','Interiors and finishes'],['soft','Soft costs'],['fee','Developer fee'],['cont','Contingency'],['approvalFees','Approvals: consultants and fees'],['carry','Land carry during approvals'],['bridgeCost','Bridge loan on credit equity']];
+const CREDIT_LINES=[['geoCredit','Investment tax credit, geothermal'],['solarCredit','Investment tax credit, solar'],['fedHtc','Federal historic credit'],['stateHtc','State historic credit'],['lihtcTotal','Housing credits, ten years']];
+const INCOME_LINES=[['gprMkt','Market-rate rent'],['gprAff','Affordable rent'],['otherInc','Other income'],['utilFee','Utility fee'],['vacLoss','Vacancy loss',-1],['concLoss','Concessions',-1],['solarExport','Solar sold to grid']];
+const OPEX_LINES=[['taxes','Property taxes'],['insurance','Insurance'],['utilities','Utilities paid by landlord'],['rm','Repairs and maintenance'],['payroll','Payroll and admin'],['mgmt','Management fee'],['mkt','Marketing and turnover'],['res','Replacement reserves'],['gardens','Garden upkeep'],['compliance','Housing credit compliance']];
+
+/* ================= RENDERERS ================= */
+function sbar(barEl,legEl,r,defs,perUnit,cont){
+  const val=k=>k==='cont'&&cont?r.cont+r.approvalFees+r.carry+r.bridgeCost:r[k];
+  const total=defs.reduce((s,[k])=>s+val(k),0);
+  barEl.innerHTML=defs.map(([k,l,c])=>{const p=val(k)/total;const light=c==='--u4'||c==='--u5';return `<span class="${light?'lt':''}" style="flex:${Math.max(p,0.001)} 1 0;background:var(${c})" title="${l}: ${f$(val(k))}">${p>0.11?'<b>'+fP(p,0)+'</b>':''}</span>`}).join('');
+  legEl.innerHTML=defs.map(([k,l,c])=>`<div class="lk"><i style="background:var(${c})"></i>${l}</div><div class="lv num">${fM(val(k))}${perUnit?`<small>${f$(val(k)/r.units)} per unit</small>`:''}</div>`).join('')+`<div class="tot"><span>Total</span><span class="num">${fM(total)}</span></div>`;
+}
+function waterfall(el,r,full){
+  const steps=[['Gross rent',r.gpr,'pos'],['Other income',r.otherInc,'pos']];
+  if(r.utilFee>0)steps.push(['Utility fee',r.utilFee,'pos']);
+  steps.push(['Vacancy',-(r.vacLoss+r.concLoss),'neg']);
+  if(r.solarExport>0)steps.push(['Solar sales',r.solarExport,'pos']);
+  steps.push(['Expenses',-r.opex,'neg'],['NOI',null,'tot']);
+  if(full)steps.push(['Loan payment',-r.ds,'debt'],['To investors',null,'tot']);
+  let run=0,max=0,rows=[];
+  for(const [l,v,t] of steps){
+    if(v===null){rows.push({l,s:Math.min(0,run),e:Math.max(0,run),t,val:run});}
+    else{const s=run,e=run+v;rows.push({l,s:Math.min(s,e),e:Math.max(s,e),t,val:v});run=e;}
+    max=Math.max(max,run);
+  }
+  const lo=Math.min(0,...rows.map(x=>x.s)), span=max-lo||1;
+  el.innerHTML=rows.map(x=>`<div class="row ${x.t==='tot'?'total':''}" title="${x.l}: ${f$(x.val)}"><div class="lab">${x.l}</div><div class="track"><div class="bar ${x.t}" style="left:${(x.s-lo)/span*100}%;width:${Math.max((x.e-x.s)/span*100,0.6)}%"></div></div><div class="v num ${x.val<0?'neg':''}">${fM(x.val)}</div></div>`).join('');
+}
+function gauge(el,r,b){
+  const lo=0.8,hi=2.0,px=v=>Math.min(Math.max((v-lo)/(hi-lo),0),1)*100;
+  const cls=r.dscr>=r.dscrReq?'good':r.dscr>=1?'warn':'bad';
+  el.innerHTML=`<div class="track"><div class="fill ${cls}" style="width:${px(r.dscr)}%"></div>
+    <div class="mark" style="left:${px(1)}%"></div><div class="mark req" style="left:${px(r.dscrReq)}%"></div>
+    ${b?`<div class="ghost" style="left:${px(b.dscr)}%" title="baseline ${fX(b.dscr)}"></div>`:''}
+    <span class="above" style="left:${px(1)}%"><b>1.00×</b> breaks even</span></div>
+    <div class="ticks"><span style="left:${px(r.dscrReq)}%"><b>${fX(r.dscrReq)}</b>bank says yes</span><span style="left:${px(hi)}%;transform:translateX(-100%)">${hi.toFixed(1)}×</span></div>`;
+}
+const row=(l,v,sub,cls='')=>`<tr class="${cls}"><td>${l}</td><td>${v}${sub?`<small>${sub}</small>`:''}</td></tr>`;
+function tables(r){
+  const a=state.a,m=state.moves,pu=v=>f$(v/r.units)+' per unit';
+  $('#t-budget').innerHTML=[
+    row(m.htc?'Historic building acquisition':'Land',f$(r.land),pu(r.land)),row('Foundation and site',f$(r.foundation),pu(r.foundation)),
+    row('Structure and envelope'+(m.htc?' · historic rehab':m.tall?' · steel/concrete':' · wood')+(m.tall&&m.htc?' + addition':'')+(m.ph?' + Passive House':''),f$(r.structure),pu(r.structure)),
+    row('Roof'+(m.gardens?' + gardens':''),f$(r.roof),pu(r.roof)),
+    row('Mechanical, electrical, plumbing'+(m.geo?' · geothermal':' · gas/split'),f$(r.mep),pu(r.mep)),
+    m.solar?row('Solar array',f$(r.solar),pu(r.solar)):'',
+    row('Interiors and finishes',f$(r.interiors),pu(r.interiors)),
+    row('Hard cost subtotal',f$(r.hard),pu(r.hard),'sub'),
+    row('Soft costs · '+fP(a.softPct,0)+' of hard',f$(r.soft)),row('Developer fee · '+fP(a.feePct,0),f$(r.fee)),row('Contingency · '+fP(a.contPct,0),f$(r.cont)),
+    r.approvalFees?row('Approvals: consultants and fees',f$(r.approvalFees)):'',
+    r.carry?row('Land carry · '+r.delayMonths+' months at '+fP(a.carryRate,0),f$(r.carry)):'',
+    r.bridgeCost?row('Bridge loan on credit equity · '+fP(a.bridgeRate,1)+' on '+fP(a.bridgeDraw,0)+' of '+fM(r.credits)+' for '+a.buildMonths+' months + '+fP(a.bridgeFee,0)+' fee',f$(r.bridgeCost),'counts toward basis and QRE'):'',
+    row('Total development cost',f$(r.tdc),f$(r.tdcUnit)+' per unit · '+r.units+' units, '+r.floors+' stories','sub')].join('');
+  $('#t-src').innerHTML=[
+    row('Senior loan'+(m.lihtc?' · tax-exempt bonds':''),f$(r.debt),fP(r.ltcActual,1)+' of cost, '+fP(r.ltvActual,0)+' of value, at '+fP(r.rate,2)+' · '+(r.sizing==='fail'?fP(a.ltc,0)+' of cost less credits; the bank\'s test fails':r.sizing==='coverage'?'sized to '+fX(a.sizeDscr)+' coverage':r.sizing==='ltv'?'capped at '+fP(a.ltv,0)+' of value':r.sizing==='ltc'?'capped at '+fP(a.ltc,0)+' of cost':'not needed')),
+    r.itcCash?row('Investment tax credit equity',f$(r.itcCash),fM(r.geoCredit+r.solarCredit)+' of credits at '+Math.round(a.creditPrice*100)+'¢'):'',
+    r.htcCash?row('Historic tax credit equity',f$(r.htcCash),fM(r.fedHtc)+' federal at '+Math.round(a.fedHtcPrice*100)+'¢ + '+fM(r.stateHtc)+' state at '+Math.round(a.stateHtcPrice*100)+'¢'):'',
+    r.lihtcCash?row('Housing tax credit equity',f$(r.lihtcCash),fM(r.lihtcTotal)+' of credits at '+Math.round(a.lihtcPrice*100)+'¢'):'',
+    row('Investor equity · '+fP(r.eqShare,1)+' of cost',f$(r.equity),r.sizing==='fail'?'':r.equityFull-r.equity>1?fM(r.equityFull-r.equity)+' less than a '+fP(1-a.ltc,0)+' check, because credits fill the gap once the loan is maxed':''),
+    r.surplus?row('Surplus sources beyond cost',f$(r.surplus),'credits exceed total cost'):'',
+    row('Total sources',f$(r.tdc+r.surplus),'','sub')].join('');
+  $('#t-inc').innerHTML=[
+    row('Market-rate rent · '+r.mktUnits+' units at $'+a.rent.toLocaleString()+' a month',f$(r.gprMkt)),
+    m.lihtc?row('Affordable rent · '+r.affUnits+' units at $'+a.affordableRent.toLocaleString()+' a month',f$(r.gprAff)):'',
+    row('Parking, fees, storage',f$(r.otherInc)),
+    m.ph?row('Utility fee · $'+a.utilFee+' a month on market units',f$(r.utilFee)):'',
+    row('Vacancy · '+fP(r.vac,1)+' blended','−'+f$(r.vacLoss),'','neg'),row('Concessions · '+fP(r.conc,0)+' of market income','−'+f$(r.concLoss),'','neg'),
+    row('Effective gross income',f$(r.egi),'','sub'),
+    m.solar?row('Solar sold to grid',f$(r.solarExport),r.solarExport?'':'all power used on site'):''].join('');
+  $('#t-opex').innerHTML=[
+    row('Property taxes',f$(r.taxes),pu(r.taxes)),row('Insurance',f$(r.insurance),pu(r.insurance)),
+    row('Utilities paid by landlord'+(m.ph?' · whole building':' · common areas'),f$(r.utilities),(m.solar?'after '+fM(r.solarOffset)+' solar offset · ':'')+'energy at '+fP(r.ef,0)+' of baseline'),
+    row('Repairs and maintenance',f$(r.rm),pu(r.rm)),row('Payroll and admin',f$(r.payroll),pu(r.payroll)),
+    row('Management · '+fP(a.mgmt,1)+' of EGI',f$(r.mgmt)),row('Marketing and turnover',f$(r.mkt)),row('Replacement reserves',f$(r.res)),
+    m.gardens?row('Garden upkeep',f$(r.gardens)):'',
+    m.lihtc?row('Housing credit compliance',f$(r.compliance)):'',
+    row('Total operating expenses',f$(r.opex),pu(r.opex)+' · '+fP(r.opex/r.egi,0)+' of EGI','sub')].join('');
+  $('#t-ret').innerHTML=[
+    row('Net operating income',f$(r.noi),'','sub'),row('Yield on cost · NOI ÷ cost',fP(r.yoc,2)),
+    row('Loan constant · '+fP(r.rate,2)+', '+a.amort+' yr',fP(r.konst,2)),row('Annual loan payment','−'+f$(r.ds),'','neg'),
+    row('Debt service coverage',fX(r.dscr),'bank requires '+fX(r.dscrReq),'sub'),
+    row('Cash flow to investors',f$(r.cf)),row('Cash-on-cash yield',fP(r.coc,1)),
+    row('Value at the lender\'s '+fP(a.valueCap,2)+' cap rate',f$(r.value),'NOI ÷ cap rate · loan is '+fP(r.ltvActual,0)+' of value'),
+    row('Loan that '+fX(r.dscrReq)+' coverage allows',f$(r.covLoan)),
+    row('Loan that '+fP(a.ltv,0)+' loan-to-value allows',f$(r.ltvLoan)),
+    row('Largest loan the bank will make',f$(r.maxLoan),'the smaller of the two'),
+    row('Loan at our '+fX(a.sizeDscr)+' cushion',f$(r.cushionLoan)),
+    row(r.gap>0?'Funding gap':'Borrowing headroom',f$(r.gapAbs),'',r.gap>0?'neg':'')].join('');
+  $('#t-irr').innerHTML=[
+    row('Equity invested at start','−'+f$(r.equity),'','neg'),
+    row('Construction and approvals',(r.T*12).toFixed(0)+' months',a.buildMonths+' to build'+(r.delayMonths?' + '+r.delayMonths+' waiting for approvals':'')),
+    row('Operating cash flow, '+r.H+' years',f$(r.opCash),'rents grow '+fP(a.rentGrowth,1)+', expenses '+fP(a.expenseGrowth,1)),
+    row('NOI in year '+(r.H+1),f$(r.noiExit)),
+    row('Sale at '+fP(a.exitCap,2)+' cap',f$(r.exitValue),fP(a.saleCost,0)+' selling costs'),
+    row('Loan balance repaid','−'+f$(r.bal),'','neg'),
+    row('Net sale proceeds to equity',f$(r.saleNet),'','sub'),
+    row('Total profit',f$(r.profit),fX(r.multiple)+' equity multiple'),
+    row('Leveraged IRR, '+r.H+' years',fP(r.irr15,1),'investors want '+fP(a.targetIrr,0),'sub')].join('');
+}
+function mathPanel(m){
+  const a=state.a, on=state.moves[m.id];
+  const w=calc({...state.moves,[m.id]:true},a), o=calc({...state.moves,[m.id]:false},a);
+  const d=k=>w[k]-o[k];
+  const diff=(lines,mult=1)=>{const rows=lines.filter(([k])=>Math.abs(d(k))>=1).map(([k,l,s])=>{const sgn=s||1;const dv=d(k)*sgn*mult;return row(l,`${fM(o[k])} → ${fM(w[k])}`,`${sg(dv)}${fM(Math.abs(dv))}`,dv>=0?'pos':'neg')}).join('');return rows||'<div class="empty">No change on this side.</div>'};
+  const before=on?`without it`:`now`, after=on?`now`:`with it`;
+  return `<p class="why">${m.why(a,w)}</p>
+  <h4>Cost · ${sg(d('tdc'))}${fM(Math.abs(d('tdc')))} total development cost</h4><table class="tbl">${diff(BUDGET_LINES,-1)}</table>
+  <h4>Paying for it · loan ${sg(d('debt'))}${fM(Math.abs(d('debt')))}</h4><table class="tbl">${diff(CREDIT_LINES)}
+    ${row('Credit cash at closing',`${fM(o.credits)} → ${fM(w.credits)}`,`${sg(d('credits'))}${fM(Math.abs(d('credits')))}`,d('credits')>=0?'pos':'neg')}
+    ${row('Senior loan',`${fM(o.debt)} → ${fM(w.debt)}`,`${sg(d('debt'))}${fM(Math.abs(d('debt')))} · ${w.sizing==='fail'?'the bank\'s test still fails, so the loan is '+fP(a.ltc,0)+' of cost less credits':w.sizing==='coverage'?'now sized to the '+fX(a.sizeDscr)+' cushion':w.sizing==='ltv'?'capped at '+fP(a.ltv,0)+' of value':w.sizing==='ltc'?'capped at '+fP(a.ltc,0)+' of cost':'not needed'}`,d('debt')<=0?'pos':'neg')}
+    ${row('Investor equity = cost − credits − loan',`${fM(o.equity)} → ${fM(w.equity)}`,`${sg(d('equity'))}${fM(Math.abs(d('equity')))} · ${fP(o.eqShare,0)} → ${fP(w.eqShare,0)} of cost`,d('equity')<=0?'pos':'neg')}</table>
+  <h4>Paycheck · NOI ${sg(d('noi'))}${fM(Math.abs(d('noi')))}</h4><table class="tbl">${diff(INCOME_LINES)}${diff(OPEX_LINES,-1)}</table>
+  <h4>Result</h4><table class="tbl">
+    ${row('Annual loan payment',`${fM(o.ds)} → ${fM(w.ds)}`,`${sg(d('ds'))}${fM(Math.abs(d('ds')))}`,d('ds')<=0?'pos':'neg')}
+    ${row('DSCR',`${fX(o.dscr)} → ${fX(w.dscr)}`,`${sg(d('dscr'))}${Math.abs(d('dscr')).toFixed(2)}×`,d('dscr')>=0?'pos':'neg')}
+    ${row('Cash-on-cash',`${fP(o.coc,1)} → ${fP(w.coc,1)}`,`${sg(d('coc'))}${(Math.abs(d('coc'))*100).toFixed(1)} pts`,d('coc')>=0?'pos':'neg')}
+    ${row(a.holdYears+'-year IRR',`${fP(o.irr15,1)} → ${fP(w.irr15,1)}`,`${sg(d('irr15'))}${(Math.abs(d('irr15'))*100).toFixed(1)} pts`,d('irr15')>=0?'pos':'neg')}
+  </table><div class="empty">Compared against the current stack ${on?'with this move switched off':'plus this move'}.</div>`;
+}
+
+/* ================= TWEEN ================= */
+const shown={};
+function setNum(id,val,fmt){
+  const el=$(id);if(!el)return;const from=shown[id]??val;shown[id]=val;
+  if(!isFinite(val)||!isFinite(from)||matchMedia('(prefers-reduced-motion: reduce)').matches||from===val){el.textContent=fmt(val);return;}
+  const t0=performance.now(),dur=450;
+  (function f(t){const k=Math.min((t-t0)/dur,1),e=1-Math.pow(1-k,3);el.textContent=fmt(from+(val-from)*e);if(k<1)requestAnimationFrame(f);})(t0);
+}
+
+/* ================= RENDER ================= */
+function renderPrimer(){
+  const r=base();
+  $$('[data-v]').forEach(el=>{const k=el.dataset.v;el.textContent=FMT[k](r[k]);});
+  const pp=$('#p-pill'),c=r.dscr>=r.dscrReq?'good':r.dscr>=1?'warn':'bad';pp.className='pill '+c;pp.innerHTML='<i></i>'+(c==='good'?'Passes':'Fails');
+  sbar($('#uses-bar-p'),$('#uses-leg-p'),r,USES,true,true);
+  sbar($('#src-bar-p'),$('#src-leg-p'),r,SRC.filter(s=>s[0]!=='credits'),false);
+  waterfall($('#wf-p'),r,false);
+  gauge($('#gauge-p'),r,null);
+}
+function renderDeal(){
+  const r=cur(),b=base(),a=state.a;
+  const m=state.moves;
+  const build=m.htc?(m.tall?'historic rehab with a non-combustible addition':'historic rehab'):m.tall?'non-combustible':'wood-frame';
+  const kind=m.lihtc?'mixed-income':'market-rate';
+  const an=[8,11,18].includes(r.floors)||(r.floors>=80&&r.floors<90)?'An':'A';
+  $('#deal-title').textContent=`${an} ${r.floors}-story, ${r.units}-unit ${build} ${kind} apartment building.`;
+  const extras=[m.ph?'Passive House envelope':'',m.geo?'geothermal':'',m.solar?'rooftop solar':'',m.gardens?'rooftop gardens':'',m.htc?'historic tax credits':'',m.lihtc?`${r.affUnits} units at 60% AMI with 4% housing credits`:''].filter(Boolean);
+  $('#deal-sub').textContent=(extras.length?extras.join(' · ').replace(/^./,c=>c.toUpperCase())+'. ':'No moves yet. ')+`Financed ${Math.round(r.ltcActual*100)}% loan, ${Math.round(a.ltc*100)}/${Math.round((1-a.ltc)*100)} at baseline. Stack the moves until the bank says yes.`;
+  setNum('#v-dscr',r.dscr,fX);setNum('#v-noi',r.noi,fM);setNum('#v-irr',r.irr15,v=>fP(v,1));
+  setNum('#v-tdc',r.tdc,fM);setNum('#v-eq',r.equity,fM);setNum('#v-eq2',r.equity,fM);setNum('#v-coc',r.coc,v=>fP(v,1));
+  const dt=r.tdc-b.tdc,de=r.equity-b.equity,dcc=r.coc-b.coc;
+  $('#v-tdc-d').textContent=f$(r.tdcUnit)+' per unit'+(Math.abs(dt)>=1?' · '+sg(dt)+fM(Math.abs(dt)):'');
+  $('#v-eq-d').textContent=fP(r.eqShare,0)+' of cost'+(Math.abs(de)>=1?' · '+sg(de)+fM(Math.abs(de)):'');
+  $('#v-coc-d').textContent=Math.abs(dcc)<1e-5?'want 5%+':sg(dcc)+(Math.abs(dcc)*100).toFixed(1)+' pts vs baseline';
+  $('#v-req').textContent=fX(r.dscrReq);$('#v-size').textContent=fX(a.sizeDscr);
+  const pill=$('#v-pill'),cls=r.dscr>=r.dscrReq?'good':r.dscr>=1?'warn':'bad';
+  pill.className='pill '+cls;pill.innerHTML='<i></i>'+(cls==='good'?'Passes':cls==='warn'?'Fails':'Under water');
+  const dn=r.noi-b.noi,di=r.irr15-b.irr15;
+  $('#v-noi-d').textContent=Math.abs(dn)<1?'baseline':sg(dn)+fM(Math.abs(dn))+' vs baseline';
+  $('#v-irr-d').textContent=Math.abs(di)<1e-5?'want '+fP(a.targetIrr,0):sg(di)+(Math.abs(di)*100).toFixed(1)+' pts · want '+fP(a.targetIrr,0);
+  gauge($('#gauge-d'),r,b);
+  const eqNote=`<b style="color:var(--good)">equity ${r.equity<r.equityFull-1?'falls to':'is'} ${fP(r.eqShare,0)} of cost</b>${r.equityFull-r.equity>1?` (${fM(r.equityFull-r.equity)} less than a ${fP(1-a.ltc,0)} check)`:''}`;
+  $('#v-gap').innerHTML=r.sizing==='fail'?`Loan needed ${fM(r.debt)} · bank offers ${fM(r.maxLoan)}${r.ltvLoan<r.covLoan?' (value-limited)':''} · <b style="color:var(--bad)">${fM(r.gap)} short</b>`
+    :r.sizing==='coverage'?`Loan sized to ${fX(a.sizeDscr)} coverage at ${fM(r.debt)} · ${eqNote}`
+    :r.sizing==='ltv'?`Loan capped at ${fP(a.ltv,0)} of value (${fM(r.value)} at ${fP(a.valueCap,2)}) · coverage ${fX(r.dscr)} · ${eqNote}`
+    :r.sizing==='ltc'?`Loan capped at ${fP(a.ltc,0)} of cost · coverage ${fX(r.dscr)} · ${eqNote}`
+    :`Credits cover the whole cost · <b style="color:var(--good)">no loan, no equity</b>${r.surplus?` · ${fM(r.surplus)} to spare`:''}`;
+  $('#v-units').textContent=r.units+' units · '+r.floors+' stories'+(r.affUnits?' · '+r.affUnits+' affordable':'');
+  MOVES.forEach(m=>{
+    const on=state.moves[m.id];
+    const alt=calc({...state.moves,[m.id]:!on},a);
+    const dD=on?r.dscr-alt.dscr:alt.dscr-r.dscr, dT=on?r.tdc-alt.tdc:alt.tdc-r.tdc, dL=on?r.debt-alt.debt:alt.debt-r.debt, dN=on?r.noi-alt.noi:alt.noi-r.noi, dI=on?r.irr15-alt.irr15:alt.irr15-r.irr15, dE=on?r.equity-alt.equity:alt.equity-r.equity;
+    const card=$('#mv-'+m.id);card.classList.toggle('on',on);
+    card.querySelector('.sw').setAttribute('aria-checked',on);
+    card.querySelector('.desc').textContent=m.desc(a);
+    card.querySelector('h3').textContent=nm(m.name,a);card.querySelector('.tag').textContent=nm(m.tag,a);
+    card.querySelector('.chips').innerHTML=`<span class="chip ${Math.abs(dD)<0.005?'':dD>=0?'up':'dn'}">${Math.abs(dD)<0.005?'±0.00':sg(dD)+(isFinite(dD)?Math.abs(dD).toFixed(2):'∞')}× DSCR</span><span class="chip ${Math.abs(dI)<0.0005?'':dI>=0?'up':'dn'}">${Math.abs(dI)<0.0005?'±0.0':sg(dI)+(Math.abs(dI)*100).toFixed(1)} pts IRR</span><span class="chip">${sg(dT)}${fM(Math.abs(dT))} cost</span><span class="chip">${sg(dL)}${fM(Math.abs(dL))} loan</span><span class="chip ${dE<=0?'up':'dn'}">${sg(dE)}${fM(Math.abs(dE))} equity</span><span class="chip">${sg(dN)}${fM(Math.abs(dN))} NOI</span>`;
+    if(state.open[m.id])card.querySelector('.math').innerHTML=mathPanel(m);
+  });
+  sbar($('#uses-bar-d'),$('#uses-leg-d'),r,USES,true,true);
+  sbar($('#src-bar-d'),$('#src-leg-d'),r,r.credits>0?SRC:SRC.filter(s=>s[0]!=='credits'),false);
+  waterfall($('#wf-d'),r,true);
+  tables(r);
+  $('#s-tdc').textContent=fM(r.tdc);$('#s-src').textContent=fM(r.tdc);$('#s-inc').textContent=fM(r.egi);$('#s-opex').textContent=fM(r.opex);$('#s-ret').textContent=fX(r.dscr);$('#s-irr').textContent=fP(r.irr15,1);
+  $('#l-dscr').textContent=fX(r.dscr);$('#l-noi').textContent=fM(r.noi);$('#l-irr').textContent=fP(r.irr15,1);
+}
+function renderAll(){renderPrimer();renderDeal();renderGlossary();}
+
+/* ================= MOVES ================= */
+const nm=(x,a)=>typeof x==='function'?x(a):x;
+const moveCard=m=>`<div class="move" id="mv-${m.id}"><div class="head"><div class="ic">${m.icon}</div><div><h3>${nm(m.name,state.a)}</h3><div class="tag">${nm(m.tag,state.a)}</div><p class="desc"></p><div class="chips"></div><button class="mathbtn" aria-expanded="false" data-math="${m.id}"><i>+</i>Show the math</button></div><button class="sw" role="switch" aria-checked="false" aria-label="Toggle ${nm(m.name,state.a)}" data-id="${m.id}"></button></div><div class="math" id="math-${m.id}"></div></div>`;
+$('#moves-design').innerHTML=MOVES.filter(m=>m.kind==='design').map(moveCard).join('');
+$('#moves-capital').innerHTML=MOVES.filter(m=>m.kind==='capital').map(moveCard).join('');
+let playing=false;
+$$('.sw').forEach(b=>b.addEventListener('click',()=>{if(playing)return;state.moves[b.dataset.id]=!state.moves[b.dataset.id];renderDeal();}));
+$$('.mathbtn').forEach(b=>b.addEventListener('click',()=>{
+  const id=b.dataset.math,open=!state.open[id];state.open[id]=open;
+  b.setAttribute('aria-expanded',open);b.lastChild.textContent=open?'Hide the math':'Show the math';
+  const p=$('#math-'+id);p.classList.toggle('open',open);if(open)p.innerHTML=mathPanel(MOVES.find(m=>m.id===id));
+}));
+$('#play').addEventListener('click',()=>{
+  if(playing)return;playing=true;MOVES.forEach(m=>state.moves[m.id]=false);renderDeal();
+  $('#play').disabled=true;const seq=MOVES.filter(m=>m.kind==='design');
+  seq.forEach((m,i)=>setTimeout(()=>{
+    $$('.move').forEach(c=>c.classList.remove('playing'));const c=$('#mv-'+m.id);c.classList.add('playing');
+    c.scrollIntoView({block:'center',behavior:'smooth'});state.moves[m.id]=true;renderDeal();
+    const r=cur();toast(`${nm(m.name,state.a)}: ${fX(r.dscr)}${r.dscr>=r.dscrReq?' · the bank says yes':''}`);
+    if(i===seq.length-1)setTimeout(()=>{playing=false;$('#play').disabled=false;c.classList.remove('playing');$('.verdict').scrollIntoView({block:'start',behavior:'smooth'});},1200);
+  },900+i*1500));
+});
+$('#clear').addEventListener('click',()=>{if(playing)return;MOVES.forEach(m=>state.moves[m.id]=false);renderDeal();});
+let tipT;function toast(s){const t=$('#tip');t.textContent=s;t.classList.add('show');clearTimeout(tipT);tipT=setTimeout(()=>t.classList.remove('show'),1400);}
+
+/* ================= DIALS ================= */
+$('#d-rate').addEventListener('input',e=>{state.a.rate=+e.target.value/100;syncDials();persistA();renderAll();});
+$('#d-req').addEventListener('input',e=>{state.a.dscrReq=+e.target.value;syncDials();persistA();renderAll();});
+$$('#d-itc button').forEach(b=>b.addEventListener('click',()=>{state.a.itc=+b.dataset.itc;syncDials();persistA();renderAll();}));
+function syncDials(){
+  const a=state.a;$('#d-rate').value=(a.rate*100).toFixed(2);$('#o-rate').textContent=(a.rate*100).toFixed(2)+'%';
+  $('#d-req').value=a.dscrReq;$('#o-req').textContent=fX(a.dscrReq);
+  $$('#d-itc button').forEach(x=>x.setAttribute('aria-pressed',Math.abs(+x.dataset.itc-a.itc)<1e-9));
+  syncForm();
+}
+
+/* ================= ASSUMPTIONS ================= */
+const SCHEMA=[
+ ['Building',[['unitsPerFloor','Units per floor','#'],['floorsBase','Stories, baseline','#'],['addFloors','Floors added by the tall move','#']]],
+ ['Development budget',[['land','Land','$'],['acquisition','Historic building acquisition','$','replaces land in the historic move'],['foundation','Foundation and site','$'],['foundationTallFactor','Foundation factor, tall building','x'],['foundationHistoricFactor','Foundation factor, historic shell','x'],['roof','Roof','$'],['structureWood','Structure and envelope, wood','$/unit'],['structureNC','Structure and envelope, non-combustible','$/unit'],['structureRehab','Historic shell restoration','$/unit'],['phPremium','Passive House premium','$/unit'],['mepOther','Electrical, plumbing, fire','$/unit'],['hvacConv','Conventional HVAC','$/unit'],['hvacGeo','Geothermal system','$/unit','the credit applies to the whole system'],['interiors','Interiors and finishes','$/unit'],['solarCost','Solar array','$'],['gardensCost','Rooftop gardens','$'],['softPct','Soft costs','% of hard'],['feePct','Developer fee','% of hard + land'],['contPct','Contingency','% of hard']]],
+ ['Income',[['rent','Market rent','$/mo'],['other','Parking, fees, storage','$/unit/mo'],['utilFee','Utility fee when landlord pays','$/mo'],['vacancy','Vacancy','%'],['concessions','Concessions','%'],['gardensVacancyCut','Vacancy cut from gardens','pts'],['gardensConcessionCut','Concession cut from gardens','pts'],['affordableShare','Housing credits: share of units restricted','%'],['affordableRent','Housing credits: 60% AMI rent','$/mo','net of utilities'],['affordableVacancy','Housing credits: vacancy on restricted units','%']]],
+ ['Operating expenses',[['taxes','Property taxes','$/unit/yr'],['insWood','Insurance, wood frame','$/unit/yr'],['insNC','Insurance, non-combustible','$/unit/yr'],['rm','Repairs and maintenance','$/unit/yr'],['payrollFixed','Payroll and admin, fixed','$/yr'],['payrollUnit','Payroll and admin, variable','$/unit/yr'],['mgmt','Management fee','% of EGI'],['mkt','Marketing and turnover','$/unit/yr'],['reserves','Replacement reserves','$/unit/yr'],['gardensOpex','Garden upkeep','$/yr'],['lihtcCompliance','Housing credit compliance','$/affordable unit/yr'],['lihtcAssetMgmt','Housing credit asset management','$/yr']]],
+ ['Energy',[['inUnitEnergy','In-unit energy, tenant-paid at baseline','$/unit/yr'],['commonEnergy','Common-area energy','$/unit/yr'],['geoFactor','Energy after geothermal','% of baseline'],['phFactor','Energy after Passive House','% of baseline','multiplies with geothermal'],['solarKwh','Solar production','kWh/yr'],['retail','Retail electricity price','$/kWh'],['exportRate','Export price for surplus solar','$/kWh']]],
+ ['Debt',[['rate','Interest rate','%'],['amort','Amortization','years'],['dscrReq','Coverage the bank requires','x','the pass/fail test'],['sizeDscr','Coverage we size the loan to','x','the cushion, once the deal passes'],['ltc','Loan-to-cost cap','%','the baseline loan; equity is the remainder'],['ltv','Loan-to-value cap','%','perm lender'],['valueCap','Cap rate the lender values at','%'],['teBondDiscount','Rate cut from tax-exempt bonds','pts','housing credit move only']]],
+ ['Bridge loan on credit equity',[['bridgeRate','Bridge loan rate','%','credit equity arrives after completion, so it is bridged'],['bridgeFee','Bridge loan fee','% of credits'],['bridgeDraw','Average balance outstanding during construction','% of credits']]],
+ ['Tax credits',[['itc','Investment tax credit, geothermal and solar','%'],['creditPrice','Investment credit price','¢ per $'],['fedHtc','Federal historic credit','% of QRE'],['fedHtcPrice','Federal historic credit price','¢ per $'],['stateHtc','State historic credit','% of QRE'],['stateHtcPrice','State historic credit price','¢ per $'],['lihtcRate','Housing credit rate','% of qualified basis','the 4% floor'],['lihtcYears','Housing credit period','years'],['lihtcPrice','Housing credit price','¢ per $'],['basisBoost','Basis boost','%','30% in a qualified census tract or difficult development area']]],
+ ['Timing and approvals',[['buildMonths','Construction and lease-up','months'],['htcMonths','Historic approvals','months','Part 1 and Part 2'],['htcFees','Historic consultants and fees','$'],['lihtcMonths','Housing credit approvals','months','application, allocation, bond inducement'],['lihtcFees','Housing credit application and bond costs','$'],['carryRate','Carry cost on land or building while waiting','%/yr']]],
+ ['Hold and exit',[['holdYears','Hold period','years'],['rentGrowth','Rent growth','%/yr'],['expenseGrowth','Expense growth','%/yr'],['exitCap','Exit cap rate','%'],['saleCost','Selling costs','% of price'],['targetIrr','IRR investors want','%']]],
+];
+const isPct=u=>/%|pts/.test(u), isCents=u=>/¢/.test(u);
+const toDisplay=(k,v,u)=>isPct(u)||isCents(u)?(+(v*100).toFixed(3)).toString():Number(v).toLocaleString('en-US',{maximumFractionDigits:4});
+const fromDisplay=(v,u)=>isPct(u)||isCents(u)?v/100:v;
+const parseIn=s=>parseFloat(String(s).replace(/[^0-9.\-]/g,''));
+function buildForm(){
+  $('#afields').innerHTML=SCHEMA.map(([g,fields])=>`<div class="agroup"><h3>${g}</h3><div class="afields">${fields.map(([k,l,u,h])=>`<div class="af" id="af-${k}"><label for="in-${k}">${l}${h?`<small>${h}</small>`:''}</label><div class="in"><input id="in-${k}" data-k="${k}" data-u="${u}" type="text" inputmode="decimal" autocomplete="off" spellcheck="false"><span>${u}</span></div></div>`).join('')}</div></div>`).join('');
+  $$('#afields input').forEach(inp=>{
+    inp.addEventListener('change',()=>{
+      const k=inp.dataset.k,u=inp.dataset.u,v=parseIn(inp.value);
+      if(!isFinite(v)){inp.value=toDisplay(k,state.a[k],u);return;}
+      state.a[k]=fromDisplay(v,u);persistA();syncDials();renderAll();
+    });
+    inp.addEventListener('focus',()=>inp.select());
+  });
+  syncForm();
+}
+function syncForm(){
+  $$('#afields input').forEach(inp=>{const k=inp.dataset.k,u=inp.dataset.u;inp.value=toDisplay(k,state.a[k],u);inp.closest('.af').classList.toggle('changed',Math.abs(state.a[k]-A[k])>1e-9);});
+}
+function persistA(){try{localStorage.setItem('std-a',JSON.stringify(state.a))}catch(e){}}
+$('#reset').addEventListener('click',()=>{state.a={...A};persistA();syncDials();renderAll();toast('Defaults restored');});
+
+/* ================= GLOSSARY ================= */
+const GLOSSARY=[
+ ['Costs','Proforma',()=>'A forward-looking spreadsheet of what a building will cost, earn and owe. Everything on the Deal tab is a proforma for one stabilized year, plus a fifteen-year hold.'],
+ ['Costs','Sources and uses',()=>'Two lists that must match to the dollar. Uses is where the money goes: land, hard costs, soft costs, fee, contingency. Sources is who provides it: the loan, tax credit equity, investor equity.'],
+ ['Costs','Hard costs',r=>`Bricks, steel, pipes and labor: everything a contractor bills for. ${fM(r.hard)} here, ${f$(r.hard/r.units)} per unit.`],
+ ['Costs','Soft costs',r=>`Architecture and engineering, permits, legal, insurance during construction, construction-period interest, marketing. Modeled as a percentage of hard costs; ${fM(r.soft)} here.`],
+ ['Costs','Contingency',()=>'Money set aside for the things nobody drew. Lenders insist on it; owners hope not to spend it.'],
+ ['Costs','Developer fee',r=>`What the developer is paid for assembling and delivering the deal, usually 3 to 5% of cost. ${fM(r.fee)} here. In tax credit deals the fee is often partly deferred and paid from cash flow.`],
+ ['Costs','Total development cost (TDC)',r=>`Everything it takes to open the doors, land included. ${fM(r.tdc)}, or ${f$(r.tdcUnit)} per unit. Cost per unit is the number underwriters compare across deals.`],
+ ['Costs','Land carry',r=>`The cost of owning land or a building while you wait for approvals: interest, taxes, insurance, security. The model charges ${fP(state.a.carryRate,0)} a year on the land or building for every month a credit program adds.`],
+ ['Income','Gross potential rent (GPR)',r=>`Every unit rented every day at the asking rent. ${fM(r.gpr)} here. Nothing ever achieves it, which is why vacancy comes next.`],
+ ['Income','Vacancy',r=>`The share of potential rent lost to empty units between tenants. Underwriters rarely accept less than 5% for market-rate housing, ${fP(r.vac,1)} blended here.`],
+ ['Income','Concessions',()=>'Free rent given to sign a lease, such as one month free on a twelve-month lease, which is an 8% concession. A soft market runs on concessions; a distinctive building does not need them.'],
+ ['Income','Effective gross income (EGI)',r=>`Rent and other income actually collected after vacancy and concessions. ${fM(r.egi)} here. Management fees are charged on EGI.`],
+ ['Income','Utility fee (or RUBS)',()=>'A flat monthly charge, or a Ratio Utility Billing System that allocates the master bill to tenants. It lets the landlord pay the utilities, capture the savings of an efficient building, and still be paid for the service.'],
+ ['Income','Operating expenses (opex)',r=>`The cost of running the building: taxes, insurance, utilities, repairs, payroll, management, marketing, reserves. ${fM(r.opex)} here, ${fP(r.opex/r.egi,0)} of EGI. Design decides several of these lines.`],
+ ['Income','Replacement reserves',()=>'A yearly deposit, typically $250 to $350 per unit, against roofs, boilers and parking lots that wear out. Lenders require it and treat it as an expense.'],
+ ['Income','Net operating income (NOI)',r=>`Effective gross income minus operating expenses, before any loan payment. ${fM(r.noi)} here. Every valuation and every loan is sized from this number.`],
+ ['Income','Yield on cost',r=>`NOI divided by total development cost, ${fP(r.yoc,2)} here. The unlevered return on building the thing. If it is below the loan constant, borrowing hurts.`],
+ ['Income','Cap rate',()=>`Capitalization rate: NOI divided by value. The market's price for a dollar of NOI. A 5.75% cap rate means buyers pay about 17.4 times NOI. Development only makes sense when yield on cost is comfortably above the exit cap rate.`],
+ ['Debt','Senior loan',r=>`The first-position mortgage. Cheapest money in the stack, first to be paid, first to foreclose. ${fM(r.debt)} here.`],
+ ['Debt','Amortization',()=>`The schedule on which principal is repaid. A 30-year amortization means level monthly payments that would retire the loan in thirty years; most loans are refinanced or repaid at sale long before.`],
+ ['Debt','Loan constant',r=>`Annual payment (interest plus principal) divided by the loan amount, ${fP(r.konst,2)} here. It is the yield a building has to beat before leverage helps.`],
+ ['Debt','Loan-to-cost (LTC)',r=>`The loan as a share of total cost, ${fP(r.ltcActual,1)} here. Lenders cap it, typically at 60 to 75%, and separately size the loan by coverage; the smaller answer wins.`],
+ ['Debt','Debt service',r=>`The annual loan payment, ${fM(r.ds)} here. Fixed, owed monthly, indifferent to whether the building is full.`],
+ ['Debt','Debt service coverage ratio (DSCR)',r=>`NOI divided by annual debt service: ${fX(r.dscr)} here against a required ${fX(r.dscrReq)}. Below 1.0 the building cannot make its payment. Lenders want a cushion of 20 to 25% in case rents slip or expenses rise.`],
+ ['Debt','Sizing the loan',r=>`The bank runs three tests and lends the smallest answer: coverage (NOI ÷ required DSCR ÷ loan constant = ${fM(r.covLoan)}), loan-to-value (${fM(r.ltvLoan)}) and loan-to-cost (${fM(r.ltcLoan)}). This model starts every deal at the loan-to-cost cap with ${fP(1-state.a.ltc,0)} equity. Tax credits first shrink the loan until the bank's tests pass; once they do, the loan is sized to our own ${fX(state.a.sizeDscr)} cushion (or the value cap if that is lower) and every further credit dollar shrinks the equity check instead. ${r.sizing==='coverage'?'That is the state now: the loan is sized to the cushion and equity is '+fP(r.eqShare,0)+' of cost.':r.sizing==='ltv'?'Value is the binding limit now.':r.sizing==='fail'?'The bank\'s test fails now, so the loan is still the full '+fP(state.a.ltc,0)+' of cost less credits.':''}`],
+ ['Debt','Coverage cushion',r=>`The difference between what the bank will accept (${fX(r.dscrReq)}) and what a careful borrower sizes to (${fX(state.a.sizeDscr)}). The cushion protects against a soft first year and gives the lender's underwriter room to shade the numbers. It costs equity: a bigger cushion means a smaller loan.`],
+ ['Debt','Loan-to-value (LTV)',r=>`The loan as a share of what the building is worth, ${fP(r.ltvActual,0)} here against a ${fP(state.a.ltv,0)} cap. Value is NOI divided by the lender's cap rate: ${fM(r.value)} at ${fP(state.a.valueCap,2)}. On a historic or high-cost building, value can sit below cost, so this test binds before loan-to-cost does.`],
+ ['Debt','Bridge loan on credit equity',r=>`Tax credit equity is paid when the credits are earned: at placed-in-service for energy credits, at Part 3 approval for historic credits, in installments for housing credits. The construction budget cannot wait, so a bridge lender advances against the credit commitment at a high rate. ${r.bridgeCost?fM(r.bridgeCost)+' here, ':''}charged on an average ${fP(state.a.bridgeDraw,0)} balance at ${fP(state.a.bridgeRate,1)} plus a ${fP(state.a.bridgeFee,0)} fee. It goes into basis, so it earns a little credit back.`],
+ ['Debt','Funding gap',r=>`The difference between the loan you need and the loan the bank will make. ${r.gap>0?fM(r.gap)+' short here.':'None here: the bank would lend '+fM(-r.gap)+' more than needed.'} A gap has to be filled with more equity, a subsidy, or a smaller building.`],
+ ['Debt','Tax-exempt bonds and the 50% test',()=>`Housing built with 4% credits is financed by private-activity bonds whose interest is exempt from federal tax, so the rate is lower. To earn the credits, bonds must fund at least half of the building's basis plus land while it is under construction.`],
+ ['Equity','Equity',r=>`The owners' money, paid in first and out last. ${fM(r.equity)} here, ${fP(r.eqShare,0)} of cost. It earns whatever is left after the bank, which is why it demands the highest return, and why every dollar of tax credit that replaces it is worth chasing.`],
+ ['Equity','Cash-on-cash (year-one yield)',r=>`Cash flow after debt service divided by equity invested, ${fP(r.coc,1)} here. A dividend yield for buildings. Investors in new construction accept a modest year one because rents grow.`],
+ ['Equity','Leverage and negative leverage',r=>`Borrowing magnifies returns in whichever direction the spread points. Yield on cost ${fP(r.yoc,2)} versus loan constant ${fP(r.konst,2)}: ${r.yoc>r.konst?'positive leverage, borrowing lifts the equity return.':'negative leverage, every borrowed dollar earns less than it costs and drags the equity return down.'}`],
+ ['Equity','Internal rate of return (IRR)',r=>`The single discount rate at which all the cash flows, equity in at the start, distributions each year, sale proceeds at the end, net to zero. ${fP(r.irr15,1)} here over ${r.H} years. Time matters: the same profit earned later is a lower IRR, which is how approval delays show up.`],
+ ['Equity','Equity multiple',r=>`Total cash returned divided by cash invested, ${fX(r.multiple)} here. Blind to time, so it is read beside the IRR, never instead of it.`],
+ ['Equity','Exit value and reversion',r=>`The sale price at the end of the hold: the following year's NOI divided by the exit cap rate, ${fM(r.exitValue)} here, less selling costs and the remaining loan balance.`],
+ ['Credits','Investment tax credit (ITC)',()=>`A federal credit under Internal Revenue Code sections 48 and 48E equal to a share of the cost of qualifying energy property, including geothermal heat pumps and solar. Base 30%, with 10-point adders for domestic content and for energy communities. Check placed-in-service deadlines with counsel.`],
+ ['Credits','Transferability and credit pricing',()=>`Since 2023 most energy credits can be sold for cash to an unrelated taxpayer. Buyers pay less than face, around 90 to 95¢, because they take on recapture risk and wait for their tax year. The model uses 92¢.`],
+ ['Credits','Federal historic tax credit (HTC)',()=>`A 20% credit on qualified rehabilitation expenditures for a certified historic structure, claimed ratably over five years. Requires Part 1 (significance), Part 2 (proposed work) and Part 3 (completed work) approvals from the State Historic Preservation Office and the National Park Service.`],
+ ['Credits','State historic tax credit',()=>`Many states add their own credit on the same expenditures, 20 to 30% in the strongest programs. Some are refundable or transferable and sell for 80 to 90¢. The model assumes 25%.`],
+ ['Credits','Qualified rehabilitation expenditures (QRE)',r=>`The costs that earn historic credits: work on the existing building and its systems, plus most soft costs and the developer fee. Acquisition, site work, parking, and new additions are excluded. ${r.qre?fM(r.qre)+' here.':'Switch on the historic move to see the number.'}`],
+ ['Credits','Low-Income Housing Tax Credit (LIHTC)',()=>`The main federal program for affordable rental housing. Credits are earned each year for ten years on the qualified basis of units restricted to lower-income households, and sold to investors for equity. Units stay restricted for at least thirty years.`],
+ ['Credits','4% versus 9% credits',()=>`Two flavors. 9% credits are competitively awarded, scarce, and pay for roughly 70% of a building. 4% credits come automatically with tax-exempt bonds, are not competitive, and pay for roughly 30%. This model uses the 4% credit, fixed by law at a 4% floor.`],
+ ['Credits','Area median income (AMI)',()=>`The household income at the middle of a metro area, published yearly by HUD. Affordable programs set income limits and rent caps as a percentage of it; 60% of AMI is the most common tier.`],
+ ['Credits','Set-aside and the 40/60 test',()=>`To qualify for housing credits, at least 40% of units must be affordable to households at or below 60% of AMI (or 20% at 50%, or an income average). Only the restricted share earns credits.`],
+ ['Credits','Eligible basis, applicable fraction, qualified basis',r=>`Eligible basis is the depreciable cost of the building, everything but land. The applicable fraction is the share of units (or floor area) that is affordable. Multiply them for qualified basis, the number the credit rate applies to. ${r.qualifiedBasis?fM(r.eligibleBasis)+' × '+fP(r.affUnits/r.units,0)+' = '+fM(r.qualifiedBasis)+' here.':''}`],
+ ['Credits','Basis boost',()=>`A 30% increase in eligible basis for buildings in qualified census tracts or difficult development areas, or where the state allocating agency decides it is needed. Zero by default under Inputs.`],
+ ['Credits','Compliance period',()=>`The fifteen years during which housing credit units must stay in compliance or credits are recaptured. It is why the model's hold is fifteen years.`],
+ ['Design','Passive House',()=>`A performance standard for envelopes: very low heating and cooling demand through insulation, airtightness, high-performance windows and heat-recovery ventilation. Typical construction premium of 1 to 5%; energy cuts of 60 to 80% on heating and cooling.`],
+ ['Design','Non-combustible construction (Type I)',()=>`Steel, concrete or masonry structure that does not burn. Building codes allow it to go far taller than wood (Type III or V), and insurers price it well below wood frame, which has become expensive to insure.`],
+ ['Design','Geothermal heat pump',()=>`Heat pumps that exchange heat with the ground through bored loops instead of with outside air. Higher first cost, lower operating cost, no combustion, and the entire system qualifies for the investment tax credit.`],
+];
+function renderGlossary(){
+  const r=cur(),q=($('#gl-search').value||'').trim().toLowerCase();
+  const items=GLOSSARY.filter(([c,t,f])=>!q||t.toLowerCase().includes(q)||c.toLowerCase().includes(q)||f(r).toLowerCase().includes(q));
+  $('#gl').innerHTML=items.length?items.map(([c,t,f])=>`<div class="term"><div class="cat">${c}</div><h4>${t}</h4><p>${f(r)}</p></div>`).join(''):'<div class="none">No term matches that search.</div>';
+}
+$('#gl-search').addEventListener('input',renderGlossary);
+
+/* ================= NAVIGATION ================= */
+const STEPS=$$('.step').length, VIEWNAMES={primer:'Primer',deal:'The Deal',glossary:'Glossary',inputs:'Inputs'};
+function goStep(n){
+  state.step=Math.max(0,Math.min(STEPS-1,n));
+  $$('.step').forEach(s=>s.classList.toggle('active',+s.dataset.step===state.step));
+  $('#dots').innerHTML=Array.from({length:STEPS},(_,i)=>`<i class="${i===state.step?'on':''}"></i>`).join('');
+  $('#prev').disabled=state.step===0;
+  $('#next').textContent=state.step===STEPS-1?'Open the deal →':'Next →';
+  $('.stepnav').style.display=state.step===0?'none':'flex';
+  $('#scroller').scrollTo({top:0,behavior:'smooth'});
+  try{localStorage.setItem('std-step',state.step)}catch(e){}
+}
+function goView(v){
+  if(!VIEWNAMES[v])v='primer';
+  state.view=v;['primer','deal','glossary','inputs'].forEach(x=>$('#view-'+x).hidden=x!==v);
+  $$('.bnav button').forEach(b=>b.setAttribute('aria-selected',b.dataset.view===v));
+  $('#viewname').textContent=VIEWNAMES[v];
+  $('#scroller').scrollTo({top:0});
+  try{localStorage.setItem('std-view',v)}catch(e){}
+}
+$$('[data-view]').forEach(b=>b.addEventListener('click',()=>goView(b.dataset.view)));
+(function(){const sc=$('#scroller'),vd=$('.verdict'),dh=$('.deal-head');let raf=0;
+  // sticky elements report a moving offsetTop, so measure the static heading above the strip instead
+  sc.addEventListener('scroll',()=>{if(raf)return;raf=requestAnimationFrame(()=>{raf=0;vd.classList.toggle('compact',state.view==='deal'&&dh.getBoundingClientRect().bottom<sc.getBoundingClientRect().top+60);});},{passive:true});})();
+$$('[data-go]').forEach(b=>b.addEventListener('click',()=>goStep(+b.dataset.go)));
+$('#prev').addEventListener('click',()=>goStep(state.step-1));
+$('#next').addEventListener('click',()=>state.step===STEPS-1?goView('deal'):goStep(state.step+1));
+document.addEventListener('keydown',e=>{if(state.view!=='primer'||e.target.tagName==='INPUT')return;if(e.key==='ArrowRight')$('#next').click();if(e.key==='ArrowLeft')goStep(state.step-1);});
+
+/* ================= BOOT ================= */
+try{const saved=JSON.parse(localStorage.getItem('std-a')||'null');if(saved&&typeof saved==='object')for(const k in A)if(typeof saved[k]==='number'&&isFinite(saved[k]))state.a[k]=saved[k];}catch(e){}
+buildForm();syncDials();renderAll();
+let s0=0,v0='primer';try{s0=+(localStorage.getItem('std-step')||0);v0=localStorage.getItem('std-view')||'primer';}catch(e){}
+goStep(s0);goView(v0);
+</script>
