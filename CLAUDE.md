@@ -13,7 +13,7 @@ Owner: Jonathan Arnold, Arnold Development Group. GitHub account for this repo: 
 ## Where it is published
 
 - Live (GitHub Pages): https://jarnold-coder.github.io/stacking-the-deal/ (redeploys on push to `main`)
-- Live (Vercel): https://stacking-the-deal.vercel.app/ (project `stacking-the-deal`, connected to the GitHub repo; every push to `main` deploys production, other branches get preview URLs; `vercel.json` marks it a static site with no build step)
+- Live (Vercel): https://stackingthedeal.com/ (GoDaddy domain, A + CNAME records to Vercel; www redirects to apex; also https://stacking-the-deal.vercel.app/; project `stacking-the-deal`, connected to the GitHub repo; every push to `main` deploys production, other branches get preview URLs; `vercel.json` marks it a static site with no build step)
 - Claude artifact (private preview, same page): https://claude.ai/code/artifact/b33dc332-494f-472c-a61d-704662782f01 — publish `src/app.html` with the Artifact tool passing that `url` so the link stays stable.
 - Pointer only: `C:\Users\jarno\dev\HNEL_MHDC_Memo\13_stacking_the_deal_app\README.md`. Do not move source there; the HNEL workspace is confidential deal work and this app is public.
 
