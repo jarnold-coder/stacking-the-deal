@@ -1,5 +1,13 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
-  "cleanUrls": true
+  "cleanUrls": true,
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "www.stackingthedeal.com" }],
+      "destination": "https://stackingthedeal.com/$1",
+      "permanent": true
+    }
+  ]
 }
