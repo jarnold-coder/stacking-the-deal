@@ -351,7 +351,7 @@ input[type=range]{width:100%;accent-color:var(--ink)}
 /* wide screens (laptop, tablet, a phone on its side): the drawing and the dashboard stay put on the left while the moves scroll on the right */
 @media (min-width:760px){
   html:not(.stage) main,html:not(.stage) .top-in,html:not(.stage) .bnav-in{max-width:1280px}
-  html:not(.stage) #view-deal{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:36px;align-items:start}
+  html:not(.stage) #view-deal:not([hidden]){display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:36px;align-items:start}
   html:not(.stage) .deal-left{display:block;position:sticky;top:48px;align-self:start;max-height:calc(100dvh - 48px - 62px);overflow:auto;overscroll-behavior:contain;scrollbar-width:none;padding-bottom:8px}
   html:not(.stage) .deal-left::-webkit-scrollbar{display:none}
   html:not(.stage) .deal-head{padding-top:18px}
@@ -412,7 +412,7 @@ html.stage .stagebtn{font-size:.72rem}
 html.stage main{max-width:none;padding:0 40px 48px}
 html.stage .live{top:63px}
 @media (min-width:1000px){
-  html.stage #view-deal{display:grid;grid-template-columns:1fr 1fr .8fr;grid-template-areas:"head band rail" "bld band rail" "facts band rail" "sub band rail" "rest rest rest";column-gap:40px;align-items:start}
+  html.stage #view-deal:not([hidden]){display:grid;grid-template-columns:1fr 1fr .8fr;grid-template-areas:"head band rail" "bld band rail" "facts band rail" "sub band rail" "rest rest rest";column-gap:40px;align-items:start}
   html.stage .deal-head{grid-area:head;padding-top:26px}
   html.stage .deal-head h2{font-size:1.9rem}
   html.stage .bld{grid-area:bld;margin:16px 0 0;width:100%}
@@ -467,7 +467,41 @@ html.stage .live{top:63px}
   html.stage .move.playing h3{color:var(--accent)}
   html.stage .deal-rest{grid-area:rest;display:grid;grid-template-columns:1fr 1fr;column-gap:56px;align-items:start;margin-top:12px}
   html.stage .deal-rest .notes{grid-column:1/-1}
-  html.stage #view-primer,html.stage #view-glossary,html.stage #view-inputs{max-width:760px}
+  html.stage #view-glossary,html.stage #view-inputs{max-width:820px}
+  /* the primer fills the room: one idea per screen, at a size the back row can read */
+  html.stage #view-primer{max-width:1180px;margin:0 auto}
+  html.stage .step{padding:40px 0 20px}
+  html.stage .step .eyebrow{font-size:.9rem}
+  html.stage .step h1{font-size:4.2rem}
+  html.stage .step h2{font-size:3rem;margin-top:14px}
+  html.stage .step .lede{font-size:1.5rem;margin-top:20px;max-width:34ch}
+  html.stage .stack{gap:28px;margin-top:32px}
+  html.stage .formula{font-size:1.6rem;padding:18px 0}
+  html.stage .formula .op{font-size:1.6rem}
+  html.stage .formula .val{font-size:1.5rem}
+  html.stage .hero-num{font-size:6.5rem}
+  html.stage .hero-sub{font-size:1.15rem}
+  html.stage .callout{padding-top:16px}
+  html.stage .callout .eyebrow{font-size:.85rem}
+  html.stage .callout p{font-size:1.3rem;max-width:52ch}
+  html.stage .kpi{padding:14px 0}
+  html.stage .kpi .k{font-size:.8rem}
+  html.stage .kpi .v,html.stage .three .kpi .v{font-size:2.4rem}
+  html.stage .kpi .s{font-size:1rem}
+  html.stage .cover .cast .v{font-size:2rem}
+  html.stage .cover .cast .k{font-size:.8rem}
+  html.stage .cover .actions .btn{font-size:1.15rem;padding:14px 24px}
+  html.stage .legend{font-size:1.1rem}
+  html.stage .sbar{height:44px}
+  html.stage .wf .row{grid-template-columns:150px 1fr 110px;font-size:1.05rem}
+  html.stage .wf .track{height:20px}
+  html.stage .wf .v{font-size:1rem}
+  html.stage .gauge .labels{font-size:.9rem}
+  html.stage .stack>p{font-size:1.15rem;max-width:60ch}
+  html.stage .stepnav{padding:16px 0 14px}
+  html.stage .stepnav .btn{font-size:1.1rem;padding:12px 22px}
+  html.stage .stepnav .dots i{width:8px;height:8px}
+  html.stage .stepnav .dots i.on{width:24px}
 }
 @media (min-width:1000px) and (max-height:960px){
   html.stage .band .numeral{font-size:6.2rem}
