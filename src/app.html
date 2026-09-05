@@ -405,13 +405,13 @@ html.stage .live{top:63px}
 @media (min-width:1000px){
   /* the Deal is three slides; --pane picks the one in view */
   html.stage #view-deal:not([hidden]){display:flex;flex-wrap:nowrap;overflow:hidden;height:calc(100vh - 68px);margin:0 -40px;padding:0}
-  html.stage .pane{display:block;flex:0 0 100%;width:100%;height:100%;overflow:hidden;padding:18px 72px 26px;transform:translateX(calc(-100% * var(--pane,0)));transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+  html.stage .pane{display:block;flex:0 0 100%;width:100%;height:100%;overflow:hidden;padding:10px 72px 26px;transform:translateX(calc(-100% * var(--pane,0)));transition:transform .5s cubic-bezier(.2,.7,.2,1)}
   html.stage .pane-2>*,html.stage .pane-3>*{width:100%;max-width:none}
   html.stage .pane-2,html.stage .pane-3{max-width:2000px;margin:0 auto}
-  html.stage .pane-1{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr) minmax(0,.85fr);grid-template-rows:auto minmax(0,1fr) auto auto;grid-template-areas:"head head head" "bld band rail" "facts band rail" "sub band rail";column-gap:44px;row-gap:0;align-items:start;max-width:2000px;margin:0 auto;height:min(100%,1100px);align-self:center}
-  html.stage #view-deal:not([hidden]){align-items:center}
+  html.stage .pane-1{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr) minmax(0,.85fr);grid-template-rows:auto minmax(0,1fr) auto auto;grid-template-areas:"head head head" "bld band rail" "facts band rail" "sub band rail";column-gap:44px;row-gap:0;align-items:start;max-width:2000px;margin:0 auto;height:min(100%,1100px);align-self:start;margin-top:clamp(0px,2.5vh,44px)}
+  html.stage #view-deal:not([hidden]){align-items:start}
   html.stage .deal-left{display:contents}
-  html.stage .deal-head{grid-area:head;padding:6px 0 14px}
+  html.stage .deal-head{grid-area:head;padding:2px 0 12px}
   html.stage .deal-head h2{font-size:clamp(1.8rem,2.6vh,2.6rem);max-width:none}
   html.stage .bld{grid-area:bld;margin:0;justify-self:center;align-self:start;width:100%}
   html.stage #facts{grid-area:facts;font-size:.75rem;margin-top:10px}
