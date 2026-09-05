@@ -10,7 +10,7 @@
   --s-debt:#3B6FC4; --s-credit:#2E8A5C; --s-equity:#C4842A;
   --u1:#3A4750; --u2:#5C6B75; --u3:#8A97A0; --u4:#B8C1C7; --u5:#D7DDE0;
   --good:#2A6E4C; --good-soft:#DDEBE2; --warn:#C9573C; --warn-soft:#F6DCD8; --bad:#C9573C; --bad-soft:#F6DCD8;
-  --tick-on:#1E2226; --tick-off:#BFC6B9; --tick-req:#1E2226;
+  --tick-on:#1E2226; --tick-off:#BFC6B9; --tick-req:#1E2226; --tick-on-ink:#F1F2EC;
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
@@ -21,7 +21,7 @@
     --s-debt:#5A8BDC; --s-credit:#3BAA6E; --s-equity:#C4862A;
     --u1:#EEEEEE; --u2:#C9CFD3; --u3:#9AA5AD; --u4:#6E7C86; --u5:#4B5862;
     --good:#7FD3A6; --good-soft:#2E4A3C; --warn:#F0876B; --warn-soft:#4A2E27; --bad:#F0876B; --bad-soft:#4A2E27;
-    --tick-on:#EEEEEE; --tick-off:rgba(255,255,255,.22); --tick-req:#EEEEEE;
+    --tick-on:#EEEEEE; --tick-off:rgba(255,255,255,.22); --tick-req:#EEEEEE; --tick-on-ink:#1E2226;
   }
 }
 :root[data-theme="dark"]{
@@ -32,7 +32,7 @@
   --s-debt:#5A8BDC; --s-credit:#3BAA6E; --s-equity:#C4862A;
   --u1:#EEEEEE; --u2:#C9CFD3; --u3:#9AA5AD; --u4:#6E7C86; --u5:#4B5862;
   --good:#7FD3A6; --good-soft:#2E4A3C; --warn:#F0876B; --warn-soft:#4A2E27; --bad:#F0876B; --bad-soft:#4A2E27;
-  --tick-on:#EEEEEE; --tick-off:rgba(255,255,255,.22); --tick-req:#EEEEEE;
+  --tick-on:#EEEEEE; --tick-off:rgba(255,255,255,.22); --tick-req:#EEEEEE; --tick-on-ink:#1E2226;
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;height:100%;overflow:hidden}
@@ -134,18 +134,18 @@ section[hidden]{display:none}
 .gauge{padding-top:22px}
 .gauge .tickwrap{position:relative;height:30px}
 .gauge .ticks{display:flex;justify-content:space-between;align-items:flex-end;height:30px}
-.gauge .ticks i{display:block;flex:none;width:3px;height:22px;background:var(--tick-off);opacity:.55;transition:background .35s,opacity .35s}
-.gauge .ticks i.on{background:var(--tick-on);opacity:1}
-.gauge .ticks i.req{background:var(--tick-req);height:30px;opacity:1}
-.gauge .ptr{position:absolute;bottom:0;width:6px;height:38px;background:var(--tick-on);transform:translateX(-50%);transition:left .6s cubic-bezier(.2,.7,.2,1)}
-.gauge .above{position:absolute;bottom:100%;margin-bottom:5px;transform:translateX(-50%);white-space:nowrap;font-family:"Geist Mono",ui-monospace,Menlo,monospace;font-size:.62rem;letter-spacing:.06em;color:var(--muted);line-height:1}
+.gauge .ticks i{display:block;flex:none;width:3px;height:22px;background:var(--tick-off);opacity:.55}
+.gauge .ticks i.req{background:var(--tick-req);height:30px;opacity:1;position:relative;z-index:2}
+.gauge .fill{position:absolute;left:0;bottom:0;height:22px;background:var(--tick-on);transition:width .6s cubic-bezier(.2,.7,.2,1)}
+.gauge .vlab{position:absolute;bottom:0;height:22px;line-height:22px;transform:translateX(-100%);padding:0 7px;font-family:"Geist Mono",ui-monospace,Menlo,monospace;font-size:.66rem;font-weight:600;letter-spacing:.04em;color:var(--tick-on-ink);white-space:nowrap;z-index:3;transition:left .6s cubic-bezier(.2,.7,.2,1)}
+.gauge .vlab.out{transform:none;color:var(--ink)}
+.band .gauge .vlab.out{color:inherit}
+.gauge .above{position:absolute;bottom:100%;margin-bottom:5px;margin-left:5px;white-space:nowrap;font-family:"Geist Mono",ui-monospace,Menlo,monospace;font-size:.62rem;letter-spacing:.06em;color:var(--muted);line-height:1}
 .gauge .labels{position:relative;height:22px;margin-top:6px;font-family:"Geist Mono",ui-monospace,Menlo,monospace;font-size:.62rem;letter-spacing:.06em;color:var(--muted)}
 .gauge .labels span{position:absolute;transform:translateX(-50%);white-space:nowrap;line-height:1.25;transition:left .6s cubic-bezier(.2,.7,.2,1)}
-.gauge .labels span.val{font-weight:600;color:var(--ink)}
 .gauge .labels span.end{transform:none;right:0}
 .gauge .labels span.hide{opacity:0}
 .band .gauge .labels,.band .gauge .above{color:inherit;opacity:.9}
-.band .gauge .labels span.val{color:inherit}
 
 /* the deal: building, facts, verdict band */
 .deal-head{padding-top:22px}
@@ -162,9 +162,9 @@ section[hidden]{display:none}
 .vsentinel{height:1px;margin-top:-1px}
 .verdict{margin:16px -18px 0}
 .band{padding:18px 18px 16px;background:var(--surface2);color:var(--ink);transition:background .5s,color .5s}
-.band.fail{background:var(--terra);color:var(--terra-ink);--tick-on:#1E2226;--tick-off:rgba(255,255,255,.4);--tick-req:#FBF5F1;--line:rgba(255,255,255,.4);--muted:rgba(251,245,241,.8)}
-.band.pass{background:var(--accent);color:var(--accent-ink);--tick-on:#0F2A1D;--tick-off:rgba(255,255,255,.4);--tick-req:#FFFFFF;--line:rgba(255,255,255,.4);--muted:rgba(255,255,255,.8)}
-:root[data-theme="dark"] .band.fail,:root[data-theme="dark"] .band.pass{--tick-on:#1E2226}
+.band.fail{background:var(--terra);color:var(--terra-ink);--tick-on:#1E2226;--tick-on-ink:#FBF5F1;--tick-off:rgba(255,255,255,.4);--tick-req:#FBF5F1;--line:rgba(255,255,255,.4);--muted:rgba(251,245,241,.8)}
+.band.pass{background:var(--accent);color:var(--accent-ink);--tick-on:#0F2A1D;--tick-on-ink:#FFFFFF;--tick-off:rgba(255,255,255,.4);--tick-req:#FFFFFF;--line:rgba(255,255,255,.4);--muted:rgba(255,255,255,.8)}
+:root[data-theme="dark"] .band.fail,:root[data-theme="dark"] .band.pass{--tick-on:#1E2226;--tick-on-ink:#FBF5F1}
 .band .row{display:flex;justify-content:space-between;align-items:center}
 .band .lab{color:inherit;opacity:.85}
 .band .status{font-family:"Geist Mono",ui-monospace,Menlo,monospace;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600}
@@ -357,7 +357,8 @@ input[type=range]{width:100%;accent-color:var(--ink)}
   html:not(.stage) .gauge .tickwrap,html:not(.stage) .gauge .ticks{height:24px}
   html:not(.stage) .gauge .ticks i{height:16px}
   html:not(.stage) .gauge .ticks i.req{height:24px}
-  html:not(.stage) .gauge .ptr{height:30px}
+  html:not(.stage) .gauge .fill,html:not(.stage) .gauge .vlab{height:16px;line-height:16px}
+  html:not(.stage) .gauge .vlab{font-size:.58rem;padding:0 5px}
   html:not(.stage) .gauge .labels{height:16px;margin-top:4px}
   html:not(.stage) .kpis{margin-top:8px}
   html:not(.stage) .kpis>div{padding-top:6px}
@@ -416,7 +417,9 @@ html.stage .live{top:63px}
   html.stage .gauge .tickwrap,html.stage .gauge .ticks{height:40px}
   html.stage .gauge .ticks i{height:28px}
   html.stage .gauge .ticks i.req{height:40px}
-  html.stage .gauge .ptr{height:48px;width:6px}
+  html.stage .gauge .fill,html.stage .gauge .vlab{height:28px;line-height:28px}
+  html.stage .gauge .vlab{font-size:.9rem}
+  html.stage .gauge .above{font-size:.85rem}
   html.stage .gauge .labels{font-size:.82rem;height:26px;margin-top:8px}
   html.stage .kpis{margin-top:20px}
   html.stage .kpis>div{padding:12px 14px 0 0}
@@ -949,10 +952,10 @@ function waterfall(el,r,full){
 function gauge(el,r,b){
   const lo=0.8,hi=2.0,N=49,px=v=>Math.min(Math.max((v-lo)/(hi-lo),0),1)*100;
   const req=r.dscrReq, ri=Math.round((req-lo)/(hi-lo)*(N-1));
-  let t='';for(let i=0;i<N;i++){const v=lo+i/(N-1)*(hi-lo);t+=`<i class="${v<=r.dscr+1e-9?'on':''}${i===ri?' req':''}"></i>`;}
-  const vx=px(r.dscr),rx=px(req),near1=Math.abs(vx-px(1))<9,nearReq=Math.abs(vx-rx)<7;
-  el.innerHTML=`<div class="tickwrap"><span class="above" style="left:${rx}%">bank says yes</span><div class="ticks">${t}</div><b class="ptr" style="left:${vx}%"></b></div>
-    <div class="labels"><span class="${near1?'hide':''}" style="left:${px(1)}%">1.00×</span><span class="val" style="left:${vx}%">${fX(r.dscr)}</span><span class="${nearReq?'hide':''}" style="left:${rx}%">${fX(req)}</span><span class="end">${hi.toFixed(1)}×</span></div>`;
+  let t='';for(let i=0;i<N;i++)t+=`<i class="${i===ri?'req':''}"></i>`;
+  const vx=px(r.dscr),rx=px(req);
+  el.innerHTML=`<div class="tickwrap"><span class="above" style="left:${rx}%">bank says yes</span><div class="ticks">${t}</div><div class="fill" style="width:${vx}%"></div><span class="vlab ${vx<15||(vx>rx&&vx-rx<10)?'out':''}" style="left:${vx}%">${fX(r.dscr)}</span></div>
+    <div class="labels"><span style="left:${px(1)}%">1.00×</span><span style="left:${rx}%">${fX(req)}</span><span class="end">${hi.toFixed(1)}×</span></div>`;
 }
 const row=(l,v,sub,cls='')=>`<tr class="${cls}"><td>${l}</td><td>${v}${sub?`<small>${sub}</small>`:''}</td></tr>`;
 function tables(r){
