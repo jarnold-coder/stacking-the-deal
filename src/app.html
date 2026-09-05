@@ -440,7 +440,8 @@ html.stage .live{top:63px}
   html.stage .kpis .v{font-size:clamp(1.5rem,3.4vh,3.4rem)}
   html.stage .kpis .s{font-size:clamp(.9rem,1.2vh,1.3rem)}
   html.stage .band.sage{padding:16px 26px 18px}
-  html.stage .gapline{font-size:clamp(1rem,1.4vh,1.5rem);margin-top:0;min-height:4.4em}
+  html.stage .gapline{font-size:clamp(1rem,1.4vh,1.5rem);margin-top:0;min-height:2.9em}
+  html.stage .gapline .eqx{display:none}
   html.stage .gapline .eqn{display:block}
   html.stage .kpis .s{min-height:2.6em}
   html.stage .band.sage .kpis .s{min-height:2.6em}
@@ -502,8 +503,8 @@ html.stage .live{top:63px}
   html.stage #view-primer,html.stage #view-glossary,html.stage #view-inputs{max-width:820px}
   html.stage #view-glossary,html.stage #view-inputs{max-width:820px}
 }
-@media (min-width:1000px) and (max-height:900px){
-  html.stage #deal-sub{display:none}
+@media (min-width:1000px) and (max-height:960px){
+  html.stage #deal-sub,html.stage .units{display:none}
 }
 /* figures: Geist with tabular numerals; small labels keep Geist Mono */
 .num,.mono,.metrics .v,.math .formula .v,.r .b,.r .c,.tbl td:last-child,.gauge .vlab,.gauge .labels,.verdict.compact .band .vmini,.live b,.wf .v,.sbar span,.af input,.af .in span,summary .sv,.formula .val,.dial label output,.legend .lv,.facts .v,.kpis .v,.band .numeral{font-family:"Geist","Helvetica Neue",Helvetica,Arial,sans-serif;font-variant-numeric:tabular-nums}
@@ -1116,7 +1117,7 @@ function renderDeal(){
   $('#v-noi-d').textContent=Math.abs(dn)<1?'baseline':sg(dn)+fM(Math.abs(dn))+' vs baseline';
   $('#v-irr-d').textContent=Math.abs(di)<1e-5?'want '+fP(a.targetIrr,0):sg(di)+(Math.abs(di)*100).toFixed(1)+' pts · want '+fP(a.targetIrr,0);
   gauge($('#gauge-d'),r,b);
-  const eqNote=`<span class="eqn"><b class="ok">equity ${r.equity<r.equityFull-1?'falls to':'is'} ${fP(r.eqShare,0)} of cost</b>${r.equityFull-r.equity>1?` (${fM(r.equityFull-r.equity)} less than a ${fP(1-a.ltc,0)} check)`:''}</span>`;
+  const eqNote=`<span class="eqn"><b class="ok">equity ${r.equity<r.equityFull-1?'falls to':'is'} ${fP(r.eqShare,0)} of cost</b>${r.equityFull-r.equity>1?`<span class="eqx"> (${fM(r.equityFull-r.equity)} less than a ${fP(1-a.ltc,0)} check)</span>`:''}</span>`;
   $('#v-gap').innerHTML=r.sizing==='fail'?`Loan needed ${fM(r.debt)} · bank offers ${fM(r.maxLoan)}${r.ltvLoan<r.covLoan?' (value-limited)':''} · <b class="short">${fM(r.gap)} short</b>`
     :r.sizing==='coverage'?`Loan sized to ${fX(a.sizeDscr)} coverage at ${fM(r.debt)} · ${eqNote}`
     :r.sizing==='ltv'?`Loan capped at ${fP(a.ltv,0)} of value (${fM(r.value)} at ${fP(a.valueCap,2)}) · coverage ${fX(r.dscr)} · ${eqNote}`
