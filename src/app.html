@@ -53,7 +53,9 @@ a{color:var(--accent)}
 
 /* shell */
 .top{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--ink)}
-.top-in{max-width:680px;margin:0 auto;padding:13px 18px 11px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.top-in{max-width:680px;margin:0 auto;padding:13px 18px 11px;display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0}
+.brand{min-width:0;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:560px){.brand small,.viewname{display:none}}
 .brand{font-family:"Geist Mono",ui-monospace,Menlo,monospace;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;font-weight:500;display:flex;align-items:center;gap:8px;white-space:nowrap}
 .brand small{font:inherit;color:var(--muted)}
 .viewname{font-family:"Geist Mono",ui-monospace,Menlo,monospace;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;font-weight:500;color:var(--muted);white-space:nowrap}
@@ -384,6 +386,12 @@ input[type=range]{width:100%;accent-color:var(--ink)}
 html.stage .deal-left{display:contents}
 /* stage: the projector layout. Forced on with ?stage or the Stage button; the slate palette comes with it. */
 .topright{display:flex;align-items:center;gap:18px}
+.fsbtn{border:1px solid var(--line2);background:transparent;padding:3px 8px;display:inline-flex;align-items:baseline;gap:1px;color:var(--muted);font-family:"Geist","Helvetica Neue",Helvetica,Arial,sans-serif;line-height:1}
+.fsbtn span:first-child{font-size:.6rem}
+.fsbtn span:last-child{font-size:.85rem}
+.fsbtn[data-fs="1"]{color:var(--ink);border-color:var(--ink)}
+.fsbtn[data-fs="2"]{color:var(--bg);background:var(--ink);border-color:var(--ink)}
+html.stage .fsbtn{display:none}
 .stagebtn{display:none;border:1px solid var(--line2);background:transparent;padding:4px 10px;font-family:"Geist Mono",ui-monospace,Menlo,monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;font-weight:500;color:var(--muted)}
 .stagebtn:hover{color:var(--ink);border-color:var(--ink)}
 @media (min-width:900px){.stagebtn{display:inline-flex}}
@@ -561,7 +569,7 @@ html.stage .live{top:63px}
       <button role="tab" data-view="glossary" aria-selected="false"><svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="4"></circle></svg><span>Glossary</span></button>
       <button role="tab" data-view="inputs" aria-selected="false"><svg viewBox="0 0 10 10"><circle cx="5" cy="5" r="4"></circle></svg><span>Inputs</span></button>
     </nav>
-    <div class="topright"><div class="viewname" id="viewname">Primer</div><button class="stagebtn" id="stagebtn" title="Projector layout · press S">Stage</button></div>
+    <div class="topright"><div class="viewname" id="viewname">Primer</div><button class="fsbtn" id="fsbtn" title="Text size" aria-label="Text size"><span>A</span><span>A</span></button><button class="stagebtn" id="stagebtn" title="Projector layout · press S">Stage</button></div>
   </div></header>
 
   <main>
@@ -1369,6 +1377,11 @@ function setStage(on){
   requestAnimationFrame(()=>{fitStage();if(state.stage)setPane(state.pane||0);});
 }
 $('#stagebtn').addEventListener('click',()=>setStage(!state.stage));
+/* text size: three steps, remembered; the layout is in rem so everything scales together */
+const FS=[16,18,20];state.fs=0;
+function setFs(i){state.fs=((i%FS.length)+FS.length)%FS.length;document.documentElement.style.fontSize=FS[state.fs]+'px';$('#fsbtn').dataset.fs=state.fs;try{localStorage.setItem('std-fs',state.fs)}catch(e){}if(window.__layoutCheck)__layoutCheck();}
+$('#fsbtn').addEventListener('click',()=>setFs(state.fs+1));
+try{const f=+localStorage.getItem('std-fs');if(f>0)setFs(f);}catch(e){}
 /* stage slides */
 state.pane=0;
 function setPane(n){
