@@ -453,12 +453,16 @@ html.stage .live{top:63px}
   html.stage .kpis .v{font-size:clamp(1.5rem,3.4vh,3.4rem)}
   html.stage .kpis .s{font-size:clamp(.9rem,1.2vh,1.3rem)}
   html.stage .band.sage{padding:16px 26px 18px}
-  html.stage .gapline{font-size:clamp(1rem,1.4vh,1.5rem);margin-top:0}
+  html.stage .gapline{font-size:clamp(1rem,1.4vh,1.5rem);margin-top:0;min-height:4.4em}
+  html.stage .gapline .eqn{display:block}
+  html.stage .kpis .s{min-height:2.6em}
+  html.stage .band.sage .kpis .s{min-height:2.6em}
   html.stage .units{font-size:clamp(.8rem,1vh,1.1rem)}
   html.stage .moves-wrap{grid-area:rail;display:flex;flex-direction:column;height:100%;align-self:stretch;min-height:0}
   html.stage .moves-wrap .sec{margin-top:0}
-  html.stage .moves-wrap .sec:first-child{flex:1 1 auto;display:flex;flex-direction:column;min-height:0}
-  html.stage .moves-wrap .sec+.sec{margin-top:auto;padding-top:18px;flex:0 0 auto}
+  html.stage .moves-wrap .sec:first-child{flex:5 1 0;display:flex;flex-direction:column;min-height:0}
+  html.stage .moves-wrap .sec+.sec{margin-top:0;padding-top:18px;flex:2 1 0;display:flex;flex-direction:column;min-height:0}
+  html.stage .moves-wrap .sec+.sec .moves{flex:1 1 auto;min-height:0}
   html.stage .moves-wrap .sec-h p{display:none}
   html.stage .moves-wrap .toolbar{margin:8px 0 4px;gap:16px}
   html.stage .moves-wrap .toolbar .tact{font-size:.85rem}
@@ -1125,7 +1129,7 @@ function renderDeal(){
   $('#v-noi-d').textContent=Math.abs(dn)<1?'baseline':sg(dn)+fM(Math.abs(dn))+' vs baseline';
   $('#v-irr-d').textContent=Math.abs(di)<1e-5?'want '+fP(a.targetIrr,0):sg(di)+(Math.abs(di)*100).toFixed(1)+' pts · want '+fP(a.targetIrr,0);
   gauge($('#gauge-d'),r,b);
-  const eqNote=`<b class="ok">equity ${r.equity<r.equityFull-1?'falls to':'is'} ${fP(r.eqShare,0)} of cost</b>${r.equityFull-r.equity>1?` (${fM(r.equityFull-r.equity)} less than a ${fP(1-a.ltc,0)} check)`:''}`;
+  const eqNote=`<span class="eqn"><b class="ok">equity ${r.equity<r.equityFull-1?'falls to':'is'} ${fP(r.eqShare,0)} of cost</b>${r.equityFull-r.equity>1?` (${fM(r.equityFull-r.equity)} less than a ${fP(1-a.ltc,0)} check)`:''}</span>`;
   $('#v-gap').innerHTML=r.sizing==='fail'?`Loan needed ${fM(r.debt)} · bank offers ${fM(r.maxLoan)}${r.ltvLoan<r.covLoan?' (value-limited)':''} · <b class="short">${fM(r.gap)} short</b>`
     :r.sizing==='coverage'?`Loan sized to ${fX(a.sizeDscr)} coverage at ${fM(r.debt)} · ${eqNote}`
     :r.sizing==='ltv'?`Loan capped at ${fP(a.ltv,0)} of value (${fM(r.value)} at ${fP(a.valueCap,2)}) · coverage ${fX(r.dscr)} · ${eqNote}`
