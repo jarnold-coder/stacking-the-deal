@@ -151,8 +151,9 @@ section[hidden]{display:none}
 .gauge .ticks i.req{background:var(--tick-req);height:30px;opacity:1;position:relative;z-index:2}
 .gauge .fill{position:absolute;left:0;bottom:0;height:22px;background:var(--tick-on);transition:width .6s cubic-bezier(.2,.7,.2,1)}
 .gauge .vlab{position:absolute;bottom:0;height:22px;line-height:22px;transform:translateX(-100%);padding:0 7px;font-family:"Geist Mono",ui-monospace,Menlo,monospace;font-size:.66rem;font-weight:600;letter-spacing:.04em;color:var(--tick-on-ink);white-space:nowrap;z-index:3;transition:left .6s cubic-bezier(.2,.7,.2,1)}
-.gauge .vlab.out{transform:none;color:var(--ink)}
-.band .gauge .vlab.out{color:inherit}
+.gauge .vlab.out{transform:none;color:var(--ink);background:var(--bg)}
+.band.fail .gauge .vlab.out{color:inherit;background:var(--terra)}
+.band.pass .gauge .vlab.out{color:inherit;background:var(--accent)}
 .gauge .above{position:absolute;bottom:100%;margin-bottom:5px;margin-left:5px;white-space:nowrap;font-family:"Geist Mono",ui-monospace,Menlo,monospace;font-size:.62rem;letter-spacing:.06em;color:var(--muted);line-height:1}
 .gauge .labels{position:relative;height:22px;margin-top:6px;font-family:"Geist Mono",ui-monospace,Menlo,monospace;font-size:.62rem;letter-spacing:.06em;color:var(--muted)}
 .gauge .labels span{position:absolute;transform:translateX(-50%);white-space:nowrap;line-height:1.25;transition:left .6s cubic-bezier(.2,.7,.2,1)}
@@ -163,7 +164,7 @@ section[hidden]{display:none}
 /* the deal: building, facts, verdict band */
 .deal-head{padding-top:22px}
 .bld{margin:14px -8px 0;position:relative;background:var(--paper);aspect-ratio:2400/2912;overflow:hidden}
-.bld{--crop:.03;aspect-ratio:2400/2825}
+.bld{--crop:.11;aspect-ratio:2400/2592}
 .bld img{position:absolute;display:block;transition:opacity .45s ease}
 .bld .bld-f{left:0;top:calc(-1 * var(--crop) / (1 - var(--crop)) * 100%);width:100%;height:calc(100% / (1 - var(--crop)))}
 .bld .bld-r,.bld .bld-g{opacity:0}
@@ -356,8 +357,8 @@ input[type=range]{width:100%;accent-color:var(--ink)}
   html:not(.stage) .deal-left{display:block;position:sticky;top:48px;align-self:start;max-height:calc(100dvh - 48px - 62px);overflow:auto;overscroll-behavior:contain;scrollbar-width:none;padding-bottom:8px}
   html:not(.stage) .deal-left::-webkit-scrollbar{display:none}
   html:not(.stage) .deal-head{padding-top:14px}
-  html:not(.stage) .deal-head h2{display:none}
-  html:not(.stage) .bld{width:clamp(230px,calc((100dvh - 565px) * .85),100%);margin:8px auto 0}
+  html:not(.stage) .deal-head h2{font-size:1.3rem;margin-top:6px}
+  html:not(.stage) .bld{width:clamp(230px,calc((100dvh - 625px) * .926),100%);margin:8px auto 0}
   html:not(.stage) #deal-sub{display:none}
   html:not(.stage) .vsentinel{display:none}
   html:not(.stage) .verdict{margin:12px 0 0}
@@ -408,16 +409,29 @@ html.stage .deal-left{display:contents}
 .snav button[aria-selected="true"] svg circle{fill:currentColor}
 html.stage body{font-size:18px}
 html.stage .bnav{display:none}
-html.stage .top-in{max-width:none;padding:22px 40px 18px}
+html.stage .top-in{max-width:2000px;padding:22px 40px 18px}
 html.stage .brand,html.stage .viewname{font-size:.85rem}
 html.stage .stagebtn{font-size:.72rem}
-html.stage main{max-width:none;padding:0 40px 48px}
+html.stage main{max-width:2000px;padding:0 40px 48px}
 html.stage .live{top:63px}
 @media (min-width:1000px){
-  html.stage #view-deal:not([hidden]){display:grid;grid-template-columns:1fr 1fr .8fr;grid-template-areas:"head band rail" "bld band rail" "facts band rail" "sub band rail" "rest rest rest";column-gap:40px;align-items:start}
+  html.stage #view-deal:not([hidden]){display:grid;grid-template-columns:.95fr 1fr .9fr;grid-template-areas:"head band rail" "bld band rail" "facts band rail" "sub stack pay" "rest rest rest";column-gap:48px;row-gap:0;align-items:start;padding-top:12px}
   html.stage .deal-head{grid-area:head;padding-top:26px}
   html.stage .deal-head h2{font-size:1.9rem}
-  html.stage .bld{grid-area:bld;margin:16px 0 0;width:100%}
+  html.stage .bld{grid-area:bld;margin:16px auto 0;width:min(100%,calc((100vh - 340px) * .926))}
+  html.stage .deal-rest{display:contents}
+  html.stage .deal-rest>.sec:nth-child(1){grid-area:stack;margin-top:28px}
+  html.stage .deal-rest>.sec:nth-child(2){grid-area:pay;margin-top:28px}
+  html.stage .deal-rest>.sec:nth-child(n+3),html.stage .deal-rest>.notes{grid-column:1/-1}
+  html.stage .deal-rest .sec-h p{display:none}
+  html.stage .deal-rest .sec-h h3{font-size:1.1rem}
+  html.stage .deal-rest .card{padding-top:12px}
+  html.stage .legend{font-size:.85rem}
+  html.stage .legend .lk,html.stage .legend .lv{padding:4px 0}
+  html.stage .legend .lv small{display:none}
+  html.stage .sbar{height:26px}
+  html.stage .wf .row{grid-template-columns:120px 1fr 90px;font-size:.85rem}
+  html.stage .wf .track{height:14px}
   html.stage #facts{grid-area:facts;font-size:.72rem}
   html.stage #deal-sub{grid-area:sub;font-size:.95rem;margin-top:10px}
   html.stage .vsentinel{display:none}
@@ -469,8 +483,6 @@ html.stage .live{top:63px}
   html.stage .mathbtn,html.stage .math{display:none!important}
   html.stage .move.playing{margin:0;padding:11px 0 10px;background:transparent}
   html.stage .move.playing h3{color:var(--accent)}
-  html.stage .deal-rest{grid-area:rest;display:grid;grid-template-columns:1fr 1fr;column-gap:56px;align-items:start;margin-top:12px}
-  html.stage .deal-rest .notes{grid-column:1/-1}
   html.stage #view-glossary,html.stage #view-inputs{max-width:820px}
   /* the primer fills the room: one idea per screen, at a size the back row can read */
   html.stage #view-primer{max-width:1180px;margin:0 auto}
@@ -650,7 +662,7 @@ html.stage .live{top:63px}
     <figure class="bld" id="bld" aria-label="Elevation of the building">
       <img class="bld-f" id="bld-f" src="img/bld/f5.webp" alt="Front elevation of the building">
       <img class="bld-r" id="bld-r" alt="">
-      <img class="bld-g" id="bld-g" src="img/bld/g-geo.webp" alt="" style="left:0;top:76.81%;width:100%">
+      <img class="bld-g" id="bld-g" src="img/bld/g-geo.webp" alt="" style="left:0;top:74.73%;width:100%">
     </figure>
     <div class="facts num" id="facts"></div>
     <p class="lede" id="deal-sub" style="font-size:.95rem"></p>
@@ -968,7 +980,7 @@ function gauge(el,r,b){
   const req=r.dscrReq, ri=Math.round((req-lo)/(hi-lo)*(N-1));
   let t='';for(let i=0;i<N;i++)t+=`<i class="${i===ri?'req':''}"></i>`;
   const vx=px(r.dscr),rx=px(req);
-  el.innerHTML=`<div class="tickwrap"><span class="above" style="left:${rx}%">bank says yes</span><div class="ticks">${t}</div><div class="fill" style="width:${vx}%"></div><span class="vlab ${vx<15||(vx>rx&&vx-rx<10)?'out':''}" style="left:${vx}%">${fX(r.dscr)}</span></div>
+  el.innerHTML=`<div class="tickwrap"><span class="above" style="left:${rx}%">bank says yes</span><div class="ticks">${t}</div><div class="fill" style="width:${vx}%"></div><span class="vlab ${vx<12?'out':''}" style="left:${vx>rx&&vx-rx<9?rx-1.2:vx}%">${fX(r.dscr)}</span></div>
     <div class="labels"><span style="left:${px(1)}%">1.00×</span><span style="left:${rx}%">${fX(req)}</span><span class="end">${hi.toFixed(1)}×</span></div>`;
 }
 const row=(l,v,sub,cls='')=>`<tr class="${cls}"><td>${l}</td><td>${v}${sub?`<small>${sub}</small>`:''}</td></tr>`;
@@ -1141,7 +1153,7 @@ function renderAll(){renderPrimer();renderDeal();renderGlossary();}
 /* ================= BUILDING ================= */
 /* One base drawing; each move is a region pasted on it. Facade images carry the envelope and historic
    skins for the five- and eight-floor buildings; roof crops sit above the parapet; the ground crop below grade. */
-const CROP=0.03, cropY=t=>((t/100-CROP)/(1-CROP)*100);
+const CROP=0.11, cropY=t=>((t/100-CROP)/(1-CROP)*100);
 const BLD={dir:'img/bld/',roof:{5:{top:cropY(14.94),left:21.25,width:58.21},8:{top:cropY(3.30),left:21.25,width:58.21}}};
 function updateBuilding(m){
   const h=m.tall?8:5, skin=m.ph&&m.htc?'-phhist':m.ph?'-ph':m.htc?'-hist':'';
