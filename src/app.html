@@ -150,8 +150,9 @@ section[hidden]{display:none}
 /* the deal: building, facts, verdict band */
 .deal-head{padding-top:22px}
 .bld{margin:14px -8px 0;position:relative;background:var(--paper);aspect-ratio:2400/2912;overflow:hidden}
+.bld{--crop:.03;aspect-ratio:2400/2825}
 .bld img{position:absolute;display:block;transition:opacity .45s ease}
-.bld .bld-f{left:0;top:0;width:100%;height:100%}
+.bld .bld-f{left:0;top:calc(-1 * var(--crop) / (1 - var(--crop)) * 100%);width:100%;height:calc(100% / (1 - var(--crop)))}
 .bld .bld-r,.bld .bld-g{opacity:0}
 .bld .bld-r.show,.bld .bld-g.show{opacity:1}
 .facts{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:10px}
@@ -341,9 +342,9 @@ input[type=range]{width:100%;accent-color:var(--ink)}
   html:not(.stage) #view-deal:not([hidden]){display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:36px;align-items:start}
   html:not(.stage) .deal-left{display:block;position:sticky;top:48px;align-self:start;max-height:calc(100dvh - 48px - 62px);overflow:auto;overscroll-behavior:contain;scrollbar-width:none;padding-bottom:8px}
   html:not(.stage) .deal-left::-webkit-scrollbar{display:none}
-  html:not(.stage) .deal-head{padding-top:18px}
-  html:not(.stage) .deal-head h2{font-size:1.45rem}
-  html:not(.stage) .bld{width:clamp(240px,calc((100dvh - 560px) * .824),100%);margin:10px auto 0}
+  html:not(.stage) .deal-head{padding-top:14px}
+  html:not(.stage) .deal-head h2{display:none}
+  html:not(.stage) .bld{width:clamp(230px,calc((100dvh - 565px) * .85),100%);margin:8px auto 0}
   html:not(.stage) #deal-sub{display:none}
   html:not(.stage) .vsentinel{display:none}
   html:not(.stage) .verdict{margin:12px 0 0}
@@ -351,7 +352,7 @@ input[type=range]{width:100%;accent-color:var(--ink)}
   html:not(.stage) .band .row{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:baseline}
   html:not(.stage) .band .numeral{font-size:2.6rem;margin:0;grid-column:2;order:0}
   html:not(.stage) .band .status{grid-column:3}
-  html:not(.stage) .band .sub{margin-top:2px;font-size:.58rem}
+  html:not(.stage) .band .sub{display:none}
   html:not(.stage) .band .gauge{margin-top:8px}
   html:not(.stage) .gauge{padding-top:16px}
   html:not(.stage) .gauge .tickwrap,html:not(.stage) .gauge .ticks{height:24px}
@@ -636,7 +637,7 @@ html.stage .live{top:63px}
     <figure class="bld" id="bld" aria-label="Elevation of the building">
       <img class="bld-f" id="bld-f" src="img/bld/f5.webp" alt="Front elevation of the building">
       <img class="bld-r" id="bld-r" alt="">
-      <img class="bld-g" id="bld-g" src="img/bld/g-geo.webp" alt="" style="left:0;top:77.51%;width:100%">
+      <img class="bld-g" id="bld-g" src="img/bld/g-geo.webp" alt="" style="left:0;top:76.81%;width:100%">
     </figure>
     <div class="facts num" id="facts"></div>
     <p class="lede" id="deal-sub" style="font-size:.95rem"></p>
@@ -1127,7 +1128,8 @@ function renderAll(){renderPrimer();renderDeal();renderGlossary();}
 /* ================= BUILDING ================= */
 /* One base drawing; each move is a region pasted on it. Facade images carry the envelope and historic
    skins for the five- and eight-floor buildings; roof crops sit above the parapet; the ground crop below grade. */
-const BLD={dir:'img/bld/',roof:{5:{top:14.94,left:21.25,width:58.21},8:{top:3.30,left:21.25,width:58.21}}};
+const CROP=0.03, cropY=t=>((t/100-CROP)/(1-CROP)*100);
+const BLD={dir:'img/bld/',roof:{5:{top:cropY(14.94),left:21.25,width:58.21},8:{top:cropY(3.30),left:21.25,width:58.21}}};
 function updateBuilding(m){
   const h=m.tall?8:5, skin=m.ph&&m.htc?'-phhist':m.ph?'-ph':m.htc?'-hist':'';
   const f=$('#bld-f'),want=BLD.dir+`f${h}${skin}.webp`;
