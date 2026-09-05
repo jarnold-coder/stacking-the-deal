@@ -336,7 +336,7 @@ input[type=range]{width:100%;accent-color:var(--ink)}
 .live{position:sticky;top:47px;z-index:10;display:flex;gap:14px;align-items:center;background:var(--bg);border-bottom:1px solid var(--ink);padding:10px 0;margin-top:14px;font-family:"Geist Mono",ui-monospace,Menlo,monospace;font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;color:var(--muted)}
 .live b{font-weight:600;color:var(--ink)}
 .live .sp{flex:1}
-.deal-left{display:contents}
+.deal-left,.pane{display:contents}
 /* wide screens (laptop, tablet, a phone on its side): the drawing and the dashboard stay put on the left while the moves scroll on the right */
 @media (min-width:760px){
   html:not(.stage) main,html:not(.stage) .top-in,html:not(.stage) .bnav-in{max-width:1280px}
@@ -373,7 +373,7 @@ input[type=range]{width:100%;accent-color:var(--ink)}
   html:not(.stage) .facts .v{font-size:1rem}
   html:not(.stage) .moves-wrap{padding-top:0}
   html:not(.stage) .moves-wrap .sec:first-child{margin-top:18px}
-  html:not(.stage) .deal-rest{grid-column:2}
+  html:not(.stage) .pane-2,html:not(.stage) .pane-3{display:block;grid-column:2}
   html:not(.stage) .math{margin-left:0;margin-right:0;padding:18px 20px 20px}
   html:not(.stage) .move.playing{margin:0;padding-left:0;padding-right:0}
 }
@@ -399,65 +399,64 @@ html.stage .bnav{display:none}
 html.stage .top-in{max-width:2000px;padding:22px 40px 18px}
 html.stage .brand,html.stage .viewname{font-size:.85rem}
 html.stage .stagebtn{font-size:.72rem}
-html.stage main{max-width:2000px;padding:0 40px 48px}
+html.stage main{max-width:2000px;padding:0 40px 0}
+html.stage #view-primer,html.stage #view-glossary,html.stage #view-inputs{padding-bottom:48px}
 html.stage .live{top:63px}
 @media (min-width:1000px){
-  html.stage #view-deal:not([hidden]){display:grid;grid-template-columns:.95fr 1fr .9fr;grid-template-areas:"head band rail" "bld band rail" "facts band rail" "sub stack pay" "rest rest rest";column-gap:48px;row-gap:0;align-items:start;padding-top:12px}
-  html.stage .deal-head{grid-area:head;padding-top:26px}
-  html.stage .deal-head h2{font-size:1.9rem}
-  html.stage .bld{grid-area:bld;margin:16px auto 0;width:min(100%,calc((100vh - 340px) * .926))}
-  html.stage .deal-rest{display:contents}
-  html.stage .deal-rest>.sec:nth-child(1){grid-area:stack;margin-top:28px}
-  html.stage .deal-rest>.sec:nth-child(2){grid-area:pay;margin-top:28px}
-  html.stage .deal-rest>.sec:nth-child(n+3),html.stage .deal-rest>.notes{grid-column:1/-1}
-  html.stage .deal-rest .sec-h p{display:none}
-  html.stage .deal-rest .sec-h h3{font-size:1.1rem}
-  html.stage .deal-rest .card{padding-top:12px}
-  html.stage .legend{font-size:.85rem}
-  html.stage .legend .lk,html.stage .legend .lv{padding:4px 0}
-  html.stage .legend .lv small{display:none}
-  html.stage .sbar{height:26px}
-  html.stage .wf .row{grid-template-columns:120px 1fr 90px;font-size:.85rem}
-  html.stage .wf .track{height:14px}
-  html.stage #facts{grid-area:facts;font-size:.72rem}
-  html.stage #deal-sub{grid-area:sub;font-size:.95rem;margin-top:10px}
+  /* the Deal is three slides; --pane picks the one in view */
+  html.stage #view-deal:not([hidden]){display:flex;flex-wrap:nowrap;overflow:hidden;height:calc(100vh - 68px);margin:0 -40px;padding:0}
+  html.stage .pane{display:block;flex:0 0 100%;width:100%;height:100%;overflow:hidden;padding:18px 72px 26px;transform:translateX(calc(-100% * var(--pane,0)));transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+  html.stage .pane-2>*,html.stage .pane-3>*{width:100%;max-width:none}
+  html.stage .pane-2,html.stage .pane-3{max-width:2000px;margin:0 auto}
+  html.stage .pane-1{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr) minmax(0,.85fr);grid-template-rows:auto minmax(0,1fr) auto auto;grid-template-areas:"head head head" "bld band rail" "facts band rail" "sub band rail";column-gap:44px;row-gap:0;align-items:start;max-width:2000px;margin:0 auto;height:min(100%,1100px);align-self:center}
+  html.stage #view-deal:not([hidden]){align-items:center}
+  html.stage .deal-left{display:contents}
+  html.stage .deal-head{grid-area:head;padding:6px 0 14px}
+  html.stage .deal-head h2{font-size:1.8rem;max-width:30ch}
+  html.stage .bld{grid-area:bld;margin:0;justify-self:center;align-self:start;width:100%}
+  html.stage #facts{grid-area:facts;font-size:.75rem;margin-top:10px}
+  html.stage #deal-sub{grid-area:sub;font-size:.95rem;margin-top:8px}
   html.stage .vsentinel{display:none}
-  html.stage .verdict{grid-area:band;margin:26px 0 0;position:static}
-  html.stage .band{padding:24px 28px 20px}
+  html.stage .verdict{grid-area:band;margin:0;position:static;display:flex;flex-direction:column;height:100%;align-self:stretch}
+  html.stage .band.fail,html.stage .band.pass{flex:1 1 auto;display:flex;flex-direction:column;padding:clamp(22px,2.6vh,44px) clamp(26px,2vw,40px) clamp(20px,2.4vh,40px)}
+  html.stage .band.fail .kpis,html.stage .band.pass .kpis{margin-top:auto}
+  html.stage .band.fail .gauge,html.stage .band.pass .gauge{margin-top:auto;margin-bottom:auto}
   html.stage .band .row .lab,html.stage .band .status{font-size:.9rem}
   html.stage .band .status{padding:6px 14px;background:rgba(0,0,0,.18)}
-  html.stage .band .numeral{font-size:7.5rem;letter-spacing:-.06em;margin-top:4px}
-  html.stage .band .sub{font-size:.85rem}
-  html.stage .gauge{margin-top:22px}
-  html.stage .gauge .tickwrap,html.stage .gauge .ticks{height:40px}
-  html.stage .gauge .ticks i{height:28px}
-  html.stage .gauge .ticks i.req{height:40px}
-  html.stage .gauge .fill,html.stage .gauge .vlab{height:28px;line-height:28px}
-  html.stage .gauge .vlab{font-size:.9rem}
-  html.stage .gauge .above{font-size:.85rem}
-  html.stage .gauge .labels{font-size:.82rem;height:26px;margin-top:8px}
+  html.stage .band .numeral{font-size:clamp(5rem,11vh,13rem);letter-spacing:-.05em;margin-top:4px}
+  html.stage .band .sub{font-size:clamp(.85rem,1.1vh,1.25rem)}
+  html.stage .gauge{padding-top:clamp(22px,3vh,40px);--th:clamp(28px,4vh,60px)}
+  html.stage .gauge .tickwrap,html.stage .gauge .ticks{height:calc(var(--th) + 12px)}
+  html.stage .gauge .ticks i{height:var(--th)}
+  html.stage .gauge .ticks i.req{height:calc(var(--th) + 12px)}
+  html.stage .gauge .fill,html.stage .gauge .vlab{height:var(--th);line-height:var(--th)}
+  html.stage .gauge .vlab{font-size:clamp(.95rem,1.5vh,1.5rem)}
+  html.stage .gauge .above{font-size:clamp(.85rem,1.1vh,1.2rem)}
+  html.stage .gauge .labels{font-size:clamp(.85rem,1.1vh,1.2rem);height:26px;margin-top:8px}
   html.stage .kpis{margin-top:20px}
   html.stage .kpis>div{padding:12px 14px 0 0}
   html.stage .kpis>div+div{padding-left:14px}
-  html.stage .kpis .k{font-size:.8rem}
-  html.stage .kpis .v{font-size:2rem}
-  html.stage .kpis .s{font-size:.9rem}
-  html.stage .band.sage{padding-top:18px}
-  html.stage .gapline{font-size:1.05rem;margin-top:0}
-  html.stage .units{font-size:.8rem}
-  html.stage .moves-wrap{grid-area:rail;display:block;margin-top:26px}
+  html.stage .kpis .k{font-size:clamp(.8rem,1.1vh,1.2rem)}
+  html.stage .kpis .v{font-size:clamp(1.5rem,3.4vh,3.4rem)}
+  html.stage .kpis .s{font-size:clamp(.9rem,1.2vh,1.3rem)}
+  html.stage .band.sage{padding:16px 26px 18px}
+  html.stage .gapline{font-size:clamp(1rem,1.4vh,1.5rem);margin-top:0}
+  html.stage .units{font-size:clamp(.8rem,1vh,1.1rem)}
+  html.stage .moves-wrap{grid-area:rail;display:flex;flex-direction:column;height:100%;align-self:stretch;min-height:0}
   html.stage .moves-wrap .sec{margin-top:0}
-  html.stage .moves-wrap .sec+.sec{margin-top:22px}
+  html.stage .moves-wrap .sec:first-child{flex:1 1 auto;display:flex;flex-direction:column;min-height:0}
+  html.stage .moves-wrap .sec+.sec{margin-top:auto;padding-top:18px;flex:0 0 auto}
   html.stage .moves-wrap .sec-h p{display:none}
   html.stage .moves-wrap .toolbar{margin:8px 0 4px;gap:16px}
   html.stage .moves-wrap .toolbar .tact{font-size:.85rem}
   html.stage .moves-wrap .sec+.sec .toolbar{display:none}
-  html.stage .moves{border-top:1.5px solid var(--ink);display:block}
-  html.stage .move{grid-template-columns:40px 1fr auto 24px;grid-template-rows:auto;border-bottom:1px solid var(--line);padding:11px 0 10px;gap:0 12px;align-items:center}
-  html.stage .move.folded{padding:11px 0 10px}
-  html.stage .move .idx{font-size:1.5rem;grid-row:1;grid-column:1;padding-top:0}
+  html.stage .moves{border-top:1.5px solid var(--ink);display:flex;flex-direction:column}
+  html.stage .moves-wrap .sec:first-child .moves{flex:1 1 auto;min-height:0}
+  html.stage .move{grid-template-columns:clamp(40px,3.5vh,56px) 1fr auto 24px;grid-template-rows:auto;border-bottom:1px solid var(--line);padding:10px 0;gap:0 12px;align-items:center;flex:1 1 auto;min-height:44px;max-height:clamp(52px,9vh,110px)}
+  html.stage .move.folded{padding:10px 0}
+  html.stage .move .idx{font-size:clamp(1.5rem,2.4vh,2.3rem);grid-row:1;grid-column:1;padding-top:0}
   html.stage .move .head{grid-row:1;grid-column:2}
-  html.stage .move h3{font-size:1.05rem}
+  html.stage .move h3{font-size:clamp(1.05rem,1.6vh,1.5rem)}
   html.stage .move .tag{display:none}
   html.stage .move .sw{grid-row:1;grid-column:4;width:22px;height:22px;margin-top:0}
   html.stage .foot{grid-row:1;grid-column:3;margin-left:0}
@@ -465,52 +464,53 @@ html.stage .live{top:63px}
   html.stage .metrics{border:0;margin-top:0;display:block}
   html.stage .metrics>div{padding:0;border:0!important;flex-direction:row;align-items:baseline;gap:6px}
   html.stage .metrics>div:not(:first-child){display:none}
-  html.stage .metrics .k{font-size:.56rem}
-  html.stage .metrics .v{font-size:.85rem}
+  html.stage .metrics .k{font-size:clamp(.56rem,.75vh,.8rem)}
+  html.stage .metrics .v{font-size:clamp(.9rem,1.3vh,1.3rem)}
   html.stage .mathbtn,html.stage .math{display:none!important}
-  html.stage .move.playing{margin:0;padding:11px 0 10px;background:transparent}
+  html.stage .move.playing{margin:0;padding:10px 0;background:transparent}
   html.stage .move.playing h3{color:var(--accent)}
+  /* slides two and three */
+  html.stage .pane-2,html.stage .pane-3{display:grid;grid-template-columns:1fr 1fr;column-gap:56px;align-content:start;align-items:start;overflow:auto}
+  html.stage .pane-2>.sec,html.stage .pane-3>.sec{margin-top:8px;max-width:none}
+  html.stage .pane-3>.notes{grid-column:1/-1;max-width:none}
+  html.stage .pane .sec-h p{display:none}
+  html.stage .pane .sec-h h3{font-size:1.2rem}
+  html.stage .card{padding-top:12px}
+  html.stage .legend{font-size:.95rem}
+  html.stage .legend .lk,html.stage .legend .lv{padding:6px 0}
+  html.stage .sbar{height:32px}
+  html.stage .wf .row{grid-template-columns:130px 1fr 100px;font-size:.95rem}
+  html.stage .wf .track{height:16px}
+  html.stage summary{font-size:1.05rem}
+  html.stage .tbl{font-size:.92rem}
+  /* pager: arrows at the edges, tabs at the foot */
+  html.stage .pager{display:block}
+  html.stage .pgbtn{position:fixed;top:50%;transform:translateY(-50%);width:44px;height:64px;border:1px solid var(--line2);background:var(--bg);color:var(--ink2);padding:0;display:grid;place-items:center;z-index:30;transition:color .2s,border-color .2s}
+  html.stage .pgbtn:hover{color:var(--ink);border-color:var(--ink)}
+  html.stage .pgbtn:disabled{opacity:.25;cursor:default}
+  html.stage .pgbtn svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  html.stage .pgbtn.prev{left:14px} html.stage .pgbtn.next{right:14px}
+  html.stage .pgtabs{position:fixed;left:50%;bottom:10px;transform:translateX(-50%);display:flex;gap:26px;z-index:30;background:var(--bg);padding:6px 14px}
+  html.stage .pgtabs button{border:0;background:transparent;padding:0;font-family:"Geist Mono",ui-monospace,Menlo,monospace;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;font-weight:500;color:var(--muted);display:inline-flex;align-items:center;gap:8px}
+  html.stage .pgtabs button::before{content:"";width:8px;height:8px;border:1.2px solid currentColor;border-radius:50%}
+  html.stage .pgtabs button[aria-selected="true"]{color:var(--ink)}
+  html.stage .pgtabs button[aria-selected="true"]::before{background:currentColor}
+  html.stage #view-primer,html.stage #view-glossary,html.stage #view-inputs{max-width:820px}
   html.stage #view-glossary,html.stage #view-inputs{max-width:820px}
-  /* the primer fills the room: one idea per screen, at a size the back row can read */
-  html.stage #view-primer{max-width:1180px;margin:0 auto}
-  html.stage .step{padding:40px 0 20px}
-  html.stage .step .eyebrow{font-size:.9rem}
-  html.stage .step h1{font-size:4.2rem}
-  html.stage .step h2{font-size:3rem;margin-top:14px}
-  html.stage .step .lede{font-size:1.5rem;margin-top:20px;max-width:34ch}
-  html.stage .stack{gap:28px;margin-top:32px}
-  html.stage .formula{font-size:1.6rem;padding:18px 0}
-  html.stage .formula .op{font-size:1.6rem}
-  html.stage .formula .val{font-size:1.5rem}
-  html.stage .hero-num{font-size:6.5rem}
-  html.stage .hero-sub{font-size:1.15rem}
-  html.stage .callout{padding-top:16px}
-  html.stage .callout .eyebrow{font-size:.85rem}
-  html.stage .callout p{font-size:1.3rem;max-width:52ch}
-  html.stage .kpi{padding:14px 0}
-  html.stage .kpi .k{font-size:.8rem}
-  html.stage .kpi .v,html.stage .three .kpi .v{font-size:2.4rem}
-  html.stage .kpi .s{font-size:1rem}
-  html.stage .cover .cast .v{font-size:2rem}
-  html.stage .cover .cast .k{font-size:.8rem}
-  html.stage .cover .actions .btn{font-size:1.15rem;padding:14px 24px}
-  html.stage .legend{font-size:1.1rem}
-  html.stage .sbar{height:44px}
-  html.stage .wf .row{grid-template-columns:150px 1fr 110px;font-size:1.05rem}
-  html.stage .wf .track{height:20px}
-  html.stage .wf .v{font-size:1rem}
-  html.stage .gauge .labels{font-size:.9rem}
-  html.stage .stack>p{font-size:1.15rem;max-width:60ch}
-  html.stage .stepnav{padding:16px 0 14px}
-  html.stage .stepnav .btn{font-size:1.1rem;padding:12px 22px}
-  html.stage .stepnav .dots i{width:8px;height:8px}
-  html.stage .stepnav .dots i.on{width:24px}
 }
-@media (min-width:1000px) and (max-height:960px){
-  html.stage .band .numeral{font-size:6.2rem}
-  html.stage .deal-head h2{font-size:1.6rem}
+@media (min-width:1000px) and (max-height:900px){
   html.stage #deal-sub{display:none}
 }
+/* figures: Geist with tabular numerals; small labels keep Geist Mono */
+.num,.mono,.metrics .v,.math .formula .v,.r .b,.r .c,.tbl td:last-child,.gauge .vlab,.gauge .labels,.verdict.compact .band .vmini,.live b,.wf .v,.sbar span,.af input,.af .in span,summary .sv,.formula .val,.dial label output,.legend .lv,.facts .v,.kpis .v,.band .numeral{font-family:"Geist","Helvetica Neue",Helvetica,Arial,sans-serif;font-variant-numeric:tabular-nums}
+.metrics .v{font-size:.88rem;font-weight:500}
+.r .b,.r .c{font-size:.82rem}
+.gauge .vlab{font-size:.72rem;font-weight:600;letter-spacing:.02em}
+.gauge .labels{font-size:.68rem;letter-spacing:.02em}
+.verdict.compact .band .vmini{font-size:.82rem;letter-spacing:0}
+.tbl td:last-child{font-size:.85rem}
+.af input{font-size:.95rem}
+.pager{display:none}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 
@@ -641,6 +641,7 @@ html.stage .live{top:63px}
 
   <!-- ================= DASHBOARD ================= -->
   <section id="view-deal" hidden>
+    <div class="pane pane-1">
     <div class="deal-left">
     <div class="deal-head">
       <div class="lab">01 · The Deal</div>
@@ -692,8 +693,9 @@ html.stage .live{top:63px}
       <div class="moves" id="moves-capital"></div>
     </div>
     </div>
+    </div>
 
-    <div class="deal-rest">
+    <div class="pane pane-2">
 
     <div class="sec">
       <div class="sec-h"><div><span class="lab">05 · The capital stack</span><h3>The capital stack</h3><p>Tax credit equity pushes the loan down; more units push the whole stack up.</p></div></div>
@@ -710,6 +712,8 @@ html.stage .live{top:63px}
       <div class="card"><div class="wf" id="wf-d"></div></div>
     </div>
 
+    </div>
+    <div class="pane pane-3">
     <div class="sec">
       <div class="sec-h"><div><span class="lab">07 · Full proforma</span><h3>Full proforma</h3><p>Every number the dashboard is built from.</p></div></div>
       <details><summary>Development budget <span class="sv" id="s-tdc"></span></summary><table class="tbl" id="t-budget"></table></details>
@@ -734,6 +738,11 @@ html.stage .live{top:63px}
       <p>Simplifications worth knowing: every deal starts at the loan-to-cost cap with the remainder as equity; credit proceeds first displace the loan, and once the bank's coverage and loan-to-value tests pass the loan is sized to the cushion and further credits displace equity instead; a bridge loan on credit equity is charged during construction and fed back into cost and basis; the federal historic credit is actually claimed over five years and housing credits over ten, which is why they are priced below face; the model does not reduce historic basis for the energy credit or coordinate the two; the fifteen-year IRR treats equity as invested at the start, with operations beginning after construction and any approval delay.</p>
     </div>
     </div>
+    <nav class="pager" aria-label="Stage screens">
+      <button class="pgbtn prev" id="pg-prev" aria-label="Previous screen"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <div class="pgtabs" id="pg-tabs"><button data-pane="0" aria-selected="true">The deal</button><button data-pane="1" aria-selected="false">Capital stack and paycheck</button><button data-pane="2" aria-selected="false">Proforma and dials</button></div>
+      <button class="pgbtn next" id="pg-next" aria-label="Next screen"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+    </nav>
   </section>
 
   <!-- ================= GLOSSARY ================= -->
@@ -1307,6 +1316,7 @@ function goView(v){
   state.view=v;['primer','deal','glossary','inputs'].forEach(x=>$('#view-'+x).hidden=x!==v);
   $$('.bnav button,.snav button').forEach(b=>b.setAttribute('aria-selected',b.dataset.view===v));
   $('#viewname').textContent=VIEWNAMES[v];
+  if(v==='deal'&&typeof fitStage==='function')requestAnimationFrame(fitStage);
   $('#scroller').scrollTo({top:0});
   if(window.__layoutCheck)__layoutCheck();
   try{localStorage.setItem('std-view',v)}catch(e){}
@@ -1319,8 +1329,31 @@ function setStage(on){
   $('#stagebtn').textContent=state.stage?'Phone':'Stage';$('#snav').hidden=!state.stage;
   try{localStorage.setItem('std-stage',state.stage?'1':'0')}catch(e){}
   if(window.__layoutCheck)__layoutCheck();
+  requestAnimationFrame(()=>{fitStage();if(state.stage)setPane(state.pane||0);});
 }
 $('#stagebtn').addEventListener('click',()=>setStage(!state.stage));
+/* stage slides */
+state.pane=0;
+function setPane(n){
+  state.pane=Math.max(0,Math.min(2,n));
+  $('#view-deal').style.setProperty('--pane',state.pane);
+  $$('#pg-tabs button').forEach(b=>b.setAttribute('aria-selected',+b.dataset.pane===state.pane));
+  $('#pg-prev').disabled=state.pane===0;$('#pg-next').disabled=state.pane===2;
+}
+$('#pg-prev').addEventListener('click',()=>setPane(state.pane-1));
+$('#pg-next').addEventListener('click',()=>setPane(state.pane+1));
+$$('#pg-tabs button').forEach(b=>b.addEventListener('click',()=>setPane(+b.dataset.pane)));
+document.addEventListener('keydown',e=>{if(!state.stage||state.view!=='deal'||/INPUT|TEXTAREA/.test(e.target.tagName))return;if(e.key==='ArrowRight')setPane(state.pane+1);if(e.key==='ArrowLeft')setPane(state.pane-1);});
+/* on stage the drawing is sized to the room left in its column, never distorted */
+function fitStage(){
+  const bld=$('#bld');
+  if(!state.stage||innerWidth<1000){bld.style.width='';return;}
+  const pane=$('.pane-1'),head=$('.deal-head'),facts=$('#facts'),sub=$('#deal-sub');
+  const subH=getComputedStyle(sub).display==='none'?0:sub.offsetHeight+8;
+  const avail=pane.clientHeight-parseFloat(getComputedStyle(pane).paddingTop)-parseFloat(getComputedStyle(pane).paddingBottom)-head.offsetHeight-facts.offsetHeight-10-subH-8;
+  bld.style.width=Math.max(200,Math.min(facts.clientWidth,avail*0.926))+'px';
+}
+addEventListener('resize',()=>{fitStage();});
 document.addEventListener('keydown',e=>{if((e.key==='s'||e.key==='S')&&!e.metaKey&&!e.ctrlKey&&!e.altKey&&!/INPUT|TEXTAREA/.test(e.target.tagName))setStage(!state.stage);});
 /* Compact the verdict strip once it is stuck, and shrink the bottom nav once the reader has scrolled.
    Measured from a 1px sentinel just above the strip (sticky elements report a moving position).
