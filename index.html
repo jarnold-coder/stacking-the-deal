@@ -144,20 +144,20 @@ section[hidden]{display:none}
 .wf .v.neg{color:var(--terra)}
 
 /* tick gauge */
-.gauge{padding-top:8px}
+.gauge{padding-top:22px}
 .gauge .tickwrap{position:relative;height:30px}
 .gauge .ticks{display:flex;justify-content:space-between;align-items:flex-end;height:30px}
-.gauge .ticks i{display:block;flex:none;width:2px;height:20px;background:var(--tick-off);transition:background .35s}
-.gauge .ticks i.on{background:var(--tick-on)}
-.gauge .ticks i.req{background:var(--tick-req);height:30px}
-.gauge .ptr{position:absolute;bottom:0;width:4px;height:36px;background:var(--tick-on);transform:translateX(-50%);transition:left .6s cubic-bezier(.2,.7,.2,1)}
+.gauge .ticks i{display:block;flex:none;width:3px;height:22px;background:var(--tick-off);opacity:.55;transition:background .35s,opacity .35s}
+.gauge .ticks i.on{background:var(--tick-on);opacity:1}
+.gauge .ticks i.req{background:var(--tick-req);height:30px;opacity:1}
+.gauge .ptr{position:absolute;bottom:0;width:6px;height:38px;background:var(--tick-on);transform:translateX(-50%);transition:left .6s cubic-bezier(.2,.7,.2,1)}
+.gauge .above{position:absolute;bottom:100%;margin-bottom:5px;transform:translateX(-50%);white-space:nowrap;font-family:"Geist Mono",ui-monospace,Menlo,monospace;font-size:.62rem;letter-spacing:.06em;color:var(--muted);line-height:1}
 .gauge .labels{position:relative;height:22px;margin-top:6px;font-family:"Geist Mono",ui-monospace,Menlo,monospace;font-size:.62rem;letter-spacing:.06em;color:var(--muted)}
 .gauge .labels span{position:absolute;transform:translateX(-50%);white-space:nowrap;line-height:1.25;transition:left .6s cubic-bezier(.2,.7,.2,1)}
 .gauge .labels span.val{font-weight:600;color:var(--ink)}
-.gauge .labels span.req{transform:none;margin-left:-1px}
 .gauge .labels span.end{transform:none;right:0}
 .gauge .labels span.hide{opacity:0}
-.band .gauge .labels{color:inherit;opacity:.9}
+.band .gauge .labels,.band .gauge .above{color:inherit;opacity:.9}
 .band .gauge .labels span.val{color:inherit}
 
 /* the deal: building, facts, verdict band */
@@ -167,8 +167,11 @@ section[hidden]{display:none}
 .bld .bld-f{left:0;top:0;width:100%;height:100%}
 .bld .bld-r,.bld .bld-g{opacity:0}
 .bld .bld-r.show,.bld .bld-g.show{opacity:1}
-.facts{display:flex;justify-content:space-between;gap:8px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:8px 0;margin-top:10px;color:var(--ink2);font-size:.6rem;white-space:nowrap}
-.facts b{color:var(--ink);font-weight:600}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:10px}
+.facts>div{padding:8px 10px 8px 0;min-width:0}
+.facts>div+div{border-left:1px solid var(--line);padding-left:10px}
+.facts .k{display:block;font-family:"Geist Mono",ui-monospace,Menlo,monospace;font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.facts .v{display:block;font-family:"Geist","Helvetica Neue",Helvetica,Arial,sans-serif;font-size:1.15rem;font-weight:400;letter-spacing:-.03em;margin-top:2px;white-space:nowrap;font-variant-numeric:tabular-nums}
 .vsentinel{height:1px;margin-top:-1px}
 .verdict{margin:16px -18px 0}
 .band{padding:18px 18px 16px;background:var(--surface2);color:var(--ink);transition:background .5s,color .5s}
@@ -178,6 +181,7 @@ section[hidden]{display:none}
 .band .row{display:flex;justify-content:space-between;align-items:center}
 .band .lab{color:inherit;opacity:.85}
 .band .status{font-family:"Geist Mono",ui-monospace,Menlo,monospace;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600}
+.verdict.compact .band .status{font-size:.72rem}
 .band .numeral{font-weight:300;font-size:4.4rem;line-height:1;letter-spacing:-.05em;margin-top:8px;font-variant-numeric:tabular-nums}
 .band .numeral .x{font-size:.55em;opacity:.7;margin-left:.04em}
 .band .sub{opacity:.85;margin-top:6px;color:inherit}
@@ -197,13 +201,13 @@ section[hidden]{display:none}
 .units{font-family:"Geist Mono",ui-monospace,Menlo,monospace;font-size:.7rem;color:var(--muted);margin-top:8px;letter-spacing:.04em}
 /* compact strip once scrolled: a slim bar with the reading and the verdict */
 .verdict.compact{position:sticky;top:0;z-index:15;margin:0 -18px}
-.verdict.compact .band{padding:9px 18px 8px;display:flex;gap:14px;align-items:baseline}
+.verdict.compact .band{padding:10px 18px 9px;display:flex;gap:14px;align-items:baseline}
 .verdict.compact .band>*{display:none}
 .verdict.compact .band .row,.verdict.compact .band .numeral,.verdict.compact .band .vmini{display:flex}
-.verdict.compact .band .numeral{font-size:1.5rem;margin:0;font-weight:400;order:1}
+.verdict.compact .band .numeral{font-size:1.7rem;margin:0;font-weight:400;order:1}
 .verdict.compact .band .row{gap:10px;order:2}
 .verdict.compact .band .row .lab{display:none}
-.verdict.compact .band .vmini{font-family:"Geist Mono",ui-monospace,Menlo,monospace;font-size:.6rem;letter-spacing:.04em;gap:10px;margin-left:auto;opacity:.9;order:3;white-space:nowrap}
+.verdict.compact .band .vmini{font-family:"Geist Mono",ui-monospace,Menlo,monospace;font-size:.78rem;letter-spacing:.02em;gap:12px;margin-left:auto;opacity:.95;order:3;white-space:nowrap}
 .verdict.compact .band .vmini b{font-weight:600}
 .verdict.compact .band .vmini{min-width:0;overflow:hidden}
 @media (max-width:400px){.verdict.compact .band .vmini span:nth-child(3){display:none}}
@@ -343,6 +347,51 @@ input[type=range]{width:100%;accent-color:var(--ink)}
 .live{position:sticky;top:47px;z-index:10;display:flex;gap:14px;align-items:center;background:var(--bg);border-bottom:1px solid var(--ink);padding:10px 0;margin-top:14px;font-family:"Geist Mono",ui-monospace,Menlo,monospace;font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;color:var(--muted)}
 .live b{font-weight:600;color:var(--ink)}
 .live .sp{flex:1}
+.deal-left{display:contents}
+/* wide screens (laptop, tablet, a phone on its side): the drawing and the dashboard stay put on the left while the moves scroll on the right */
+@media (min-width:760px){
+  html:not(.stage) main,html:not(.stage) .top-in,html:not(.stage) .bnav-in{max-width:1280px}
+  html:not(.stage) #view-deal{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:36px;align-items:start}
+  html:not(.stage) .deal-left{display:block;position:sticky;top:48px;align-self:start;max-height:calc(100dvh - 48px - 62px);overflow:auto;overscroll-behavior:contain;scrollbar-width:none;padding-bottom:8px}
+  html:not(.stage) .deal-left::-webkit-scrollbar{display:none}
+  html:not(.stage) .deal-head{padding-top:18px}
+  html:not(.stage) .deal-head h2{font-size:1.45rem}
+  html:not(.stage) .bld{width:clamp(240px,calc((100dvh - 560px) * .824),100%);margin:10px auto 0}
+  html:not(.stage) #deal-sub{display:none}
+  html:not(.stage) .vsentinel{display:none}
+  html:not(.stage) .verdict{margin:12px 0 0}
+  html:not(.stage) .band{padding:12px 16px 10px}
+  html:not(.stage) .band .row{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:baseline}
+  html:not(.stage) .band .numeral{font-size:2.6rem;margin:0;grid-column:2;order:0}
+  html:not(.stage) .band .status{grid-column:3}
+  html:not(.stage) .band .sub{margin-top:2px;font-size:.58rem}
+  html:not(.stage) .band .gauge{margin-top:8px}
+  html:not(.stage) .gauge{padding-top:16px}
+  html:not(.stage) .gauge .tickwrap,html:not(.stage) .gauge .ticks{height:24px}
+  html:not(.stage) .gauge .ticks i{height:16px}
+  html:not(.stage) .gauge .ticks i.req{height:24px}
+  html:not(.stage) .gauge .ptr{height:30px}
+  html:not(.stage) .gauge .labels{height:16px;margin-top:4px}
+  html:not(.stage) .kpis{margin-top:8px}
+  html:not(.stage) .kpis>div{padding-top:6px}
+  html:not(.stage) .kpis .v{font-size:1.05rem}
+  html:not(.stage) .kpis .s{font-size:.62rem}
+  html:not(.stage) .band.sage{padding-top:10px}
+  html:not(.stage) .gapline{font-size:.76rem;margin-top:8px}
+  html:not(.stage) .units{display:none}
+  html:not(.stage) .facts>div{padding-top:6px;padding-bottom:6px}
+  html:not(.stage) .facts .v{font-size:1rem}
+  html:not(.stage) .moves-wrap{padding-top:0}
+  html:not(.stage) .moves-wrap .sec:first-child{margin-top:18px}
+  html:not(.stage) .deal-rest{grid-column:2}
+  html:not(.stage) .math{margin-left:0;margin-right:0;padding:18px 20px 20px}
+  html:not(.stage) .move.playing{margin:0;padding-left:0;padding-right:0}
+}
+@media (min-width:760px) and (max-height:520px){
+  html:not(.stage) .bld{width:clamp(180px,calc((100dvh - 420px) * .824),60%)}
+  html:not(.stage) .band .numeral{font-size:2.4rem}
+}
+html.stage .deal-left{display:contents}
 /* stage: the projector layout. Forced on with ?stage or the Stage button; the slate palette comes with it. */
 .topright{display:flex;align-items:center;gap:18px}
 .stagebtn{display:none;border:1px solid var(--line2);background:transparent;padding:4px 10px;font-family:"Geist Mono",ui-monospace,Menlo,monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;font-weight:500;color:var(--muted)}
@@ -555,6 +604,7 @@ html.stage .live{top:63px}
 
   <!-- ================= DASHBOARD ================= -->
   <section id="view-deal" hidden>
+    <div class="deal-left">
     <div class="deal-head">
       <div class="lab">01 · The Deal</div>
       <h2 style="margin-top:8px" id="deal-title">Stack the moves until the bank says yes.</h2>
@@ -590,6 +640,7 @@ html.stage .live{top:63px}
         <div class="gapline" id="v-gap"></div>
         <div class="units" id="v-units"></div>
       </section>
+    </div>
     </div>
 
     <div class="moves-wrap">
@@ -879,8 +930,8 @@ function gauge(el,r,b){
   const req=r.dscrReq, ri=Math.round((req-lo)/(hi-lo)*(N-1));
   let t='';for(let i=0;i<N;i++){const v=lo+i/(N-1)*(hi-lo);t+=`<i class="${v<=r.dscr+1e-9?'on':''}${i===ri?' req':''}"></i>`;}
   const vx=px(r.dscr),rx=px(req),near1=Math.abs(vx-px(1))<9,nearReq=Math.abs(vx-rx)<7;
-  el.innerHTML=`<div class="tickwrap"><div class="ticks">${t}</div><b class="ptr" style="left:${vx}%"></b></div>
-    <div class="labels"><span class="${near1?'hide':''}" style="left:${px(1)}%">1.00×</span><span class="val" style="left:${vx}%">${fX(r.dscr)}</span><span class="req ${nearReq?'hide':''}" style="left:${rx}%">${fX(req)} · bank says yes</span><span class="end">${hi.toFixed(1)}×</span></div>`;
+  el.innerHTML=`<div class="tickwrap"><span class="above" style="left:${rx}%">bank says yes</span><div class="ticks">${t}</div><b class="ptr" style="left:${vx}%"></b></div>
+    <div class="labels"><span class="${near1?'hide':''}" style="left:${px(1)}%">1.00×</span><span class="val" style="left:${vx}%">${fX(r.dscr)}</span><span class="${nearReq?'hide':''}" style="left:${rx}%">${fX(req)}</span><span class="end">${hi.toFixed(1)}×</span></div>`;
 }
 const row=(l,v,sub,cls='')=>`<tr class="${cls}"><td>${l}</td><td>${v}${sub?`<small>${sub}</small>`:''}</td></tr>`;
 function tables(r){
@@ -995,7 +1046,7 @@ function renderDeal(){
   const kind=m.lihtc?'mixed-income':'market-rate';
   const an=[8,11,18].includes(r.floors)||(r.floors>=80&&r.floors<90)?'An':'A';
   $('#deal-title').textContent=`A ${r.units}-unit ${build} ${kind} building, ${r.floors} floors over a podium.`;
-  $('#facts').innerHTML=`<span><b>${r.floors} floors</b> over a podium</span><span><b>${r.units}</b> units</span><span><b>${fM(r.tdc)}</b> to build</span>`;
+  $('#facts').innerHTML=`<div><span class="k">Floors above podium</span><span class="v">${r.floors}</span></div><div><span class="k">Units</span><span class="v">${r.units}</span></div><div><span class="k">To build</span><span class="v">${fM(r.tdc)}</span></div>`;
   updateBuilding(m);
   const extras=[m.ph?'Passive House envelope':'',m.geo?'geothermal':'',m.solar?'rooftop solar':'',m.gardens?'rooftop gardens':'',m.htc?'historic tax credits':'',m.lihtc?`${r.affUnits} units at 60% AMI with 4% housing credits`:''].filter(Boolean);
   $('#deal-sub').textContent=(extras.length?extras.join(' · ').replace(/^./,c=>c.toUpperCase())+'. ':'No moves yet. ')+`Financed ${Math.round(r.ltcActual*100)}% loan, ${Math.round(a.ltc*100)}/${Math.round((1-a.ltc)*100)} at baseline. Stack the moves until the bank says yes.`;
