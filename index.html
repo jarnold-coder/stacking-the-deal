@@ -205,6 +205,8 @@ section[hidden]{display:none}
 .verdict.compact .band .row .lab{display:none}
 .verdict.compact .band .vmini{font-family:"Geist Mono",ui-monospace,Menlo,monospace;font-size:.6rem;letter-spacing:.04em;gap:10px;margin-left:auto;opacity:.9;order:3;white-space:nowrap}
 .verdict.compact .band .vmini b{font-weight:600}
+.verdict.compact .band .vmini{min-width:0;overflow:hidden}
+@media (max-width:400px){.verdict.compact .band .vmini span:nth-child(3){display:none}}
 .verdict.compact .band.sage{display:none}
 .vmini{display:none}
 
