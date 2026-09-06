@@ -1,0 +1,223 @@
+1
+00:00:00,800 --> 00:00:03,730
+Every green strategy you already know has
+
+2
+00:00:03,780 --> 00:00:05,060
+a line in a spreadsheet.
+
+3
+00:00:06,100 --> 00:00:08,170
+Here are the three numbers that decide
+
+4
+00:00:08,220 --> 00:00:09,620
+whether your building gets built.
+
+5
+00:00:10,770 --> 00:00:13,580
+Before anyone talks about rent, the
+
+6
+00:00:13,630 --> 00:00:15,470
+building is a pile of costs.
+
+7
+00:00:16,210 --> 00:00:18,500
+Underwriters sort that pile into five
+
+8
+00:00:18,550 --> 00:00:22,470
+buckets. Land, hard costs, soft costs,
+
+9
+00:00:22,970 --> 00:00:25,210
+the developer's fee, and contingency.
+
+10
+00:00:26,070 --> 00:00:29,290
+$38 .5 million for 120 units.
+
+11
+00:00:30,610 --> 00:00:35,360
+$320 ,500 each. Land, foundation, and
+
+12
+00:00:35,410 --> 00:00:38,060
+roof are fixed. Everything in between
+
+13
+00:00:38,110 --> 00:00:40,230
+scales with each unit you add.
+
+14
+00:00:40,850 --> 00:00:42,050
+Hold that thought.
+
+15
+00:00:42,570 --> 00:00:44,630
+Two kinds of money build it.
+
+16
+00:00:45,770 --> 00:00:47,900
+The bank lends at six and a quarter
+
+17
+00:00:47,950 --> 00:00:51,220
+percent and wants the same payment every
+
+18
+00:00:51,270 --> 00:00:52,690
+month for 30 years.
+
+19
+00:00:53,310 --> 00:00:54,930
+Full building or not.
+
+20
+00:00:56,050 --> 00:00:59,570
+Investors want 15 % and get paid last,
+
+21
+00:01:00,110 --> 00:01:01,510
+only from what's left.
+
+22
+00:01:02,330 --> 00:01:05,100
+The bank doesn't lend 70 % because it's
+
+23
+00:01:05,150 --> 00:01:07,880
+generous. It lends what the income can
+
+24
+00:01:07,930 --> 00:01:11,530
+safely repay. So we need the income.
+
+25
+00:01:12,650 --> 00:01:15,530
+Rent, minus vacancy, minus expenses,
+
+26
+00:01:16,030 --> 00:01:17,690
+equals net operating income.
+
+27
+00:01:18,690 --> 00:01:21,960
+The building's paycheck, $2 .23 million a
+
+28
+00:01:22,010 --> 00:01:24,450
+year. Every line is a design decision.
+
+29
+00:01:24,930 --> 00:01:27,140
+The envelope sets the utility line, the
+
+30
+00:01:27,190 --> 00:01:28,700
+construction type sets the insurance
+
+31
+00:01:28,750 --> 00:01:31,250
+line, the amenities set the vacancy line.
+
+32
+00:01:31,970 --> 00:01:34,220
+Divide the paycheck by the cost, and this
+
+33
+00:01:34,270 --> 00:01:36,970
+building yields 5 .79%.
+
+34
+00:01:37,590 --> 00:01:40,560
+The loan costs 7 .39 % a year.
+
+35
+00:01:40,610 --> 00:01:43,330
+That gap is the whole story.
+
+36
+00:01:44,450 --> 00:01:46,840
+How many times over does the paycheck
+
+37
+00:01:46,890 --> 00:01:48,370
+cover the loan payment?
+
+38
+00:01:49,330 --> 00:01:51,370
+The bank wants 1 .25.
+
+39
+00:01:52,210 --> 00:01:56,010
+This building covers it 1 .12 times.
+
+40
+00:01:56,790 --> 00:01:58,630
+Barely, and not enough.
+
+41
+00:01:59,290 --> 00:02:01,480
+So the bank shrinks the loan until
+
+42
+00:02:01,530 --> 00:02:03,870
+coverage reaches 1 .25.
+
+43
+00:02:04,810 --> 00:02:08,550
+The building needs 26 .9 million.
+
+44
+00:02:09,150 --> 00:02:11,600
+The bank offers 24 .1.
+
+45
+00:02:11,650 --> 00:02:16,660
+A $2 .79 million hole opens up that
+
+46
+00:02:16,710 --> 00:02:18,870
+someone has to fill with expensive money.
+
+47
+00:02:19,930 --> 00:02:22,340
+After the bank is paid, what's left
+
+48
+00:02:22,390 --> 00:02:23,590
+belongs to the investors.
+
+49
+00:02:24,370 --> 00:02:27,880
+2 .1 % on the 11 and a half million they
+
+50
+00:02:27,930 --> 00:02:31,000
+put in. Over 15 years, with rent growth
+
+51
+00:02:31,050 --> 00:02:33,340
+and a sale, that becomes a 10 and a half
+
+52
+00:02:33,390 --> 00:02:35,570
+percent return. They wanted 15.
+
+53
+00:02:36,920 --> 00:02:39,180
+Nothing about this building is wrong.
+
+54
+00:02:39,980 --> 00:02:42,250
+It dies in underwriting, not in design
+
+55
+00:02:42,300 --> 00:02:45,350
+review, and every move that fixes it is
+
+56
+00:02:45,400 --> 00:02:47,560
+something you already know how to draw.

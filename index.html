@@ -121,6 +121,19 @@ section[hidden]{display:none}
 .cast .k{font-family:"Geist Mono",ui-monospace,Menlo,monospace;font-size:.6rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;font-weight:500}
 .cast .v{font-size:1.35rem;font-weight:400;letter-spacing:-.03em;margin-top:4px}
 .cover .actions{display:flex;gap:18px;align-items:center;margin-top:28px;flex-wrap:wrap}
+.filmact{display:inline-flex;align-items:center;gap:10px;border:0;background:transparent;padding:0;font-weight:500;color:var(--ink);cursor:pointer}
+.filmact .play{width:30px;height:30px;border:1.5px solid var(--ink);display:grid;place-items:center;flex:none}
+.filmact .play svg{width:11px;height:12px;fill:var(--ink);margin-left:2px}
+.filmact .dur{font-family:"Geist Mono",ui-monospace,Menlo,monospace;font-size:.72rem;letter-spacing:.08em;color:var(--muted);font-variant-numeric:tabular-nums}
+.filmact:hover .play{background:var(--ink)}.filmact:hover .play svg{fill:var(--bg)}
+.deal-head .filmact{margin-top:10px}
+dialog.film{border:0;padding:0;background:#161F1A;color:#F1F2EC;width:min(96vw,1400px);max-width:none;max-height:none}
+dialog.film::backdrop{background:rgba(22,31,26,.88)}
+dialog.film video{display:block;width:100%;aspect-ratio:16/9;background:#000}
+dialog.film .filmbar{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:10px 14px}
+dialog.film .filmbar .lab{color:#B7BDB0}
+dialog.film .filmbar button{border:1.5px solid #B7BDB0;background:transparent;color:#F1F2EC;padding:5px 12px;font-family:"Geist Mono",ui-monospace,Menlo,monospace;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase}
+html.stage dialog.film{width:min(96vw,calc(92vh * 16 / 9 + 0px))}
 
 /* stacked bars */
 .sbar{display:flex;height:34px;overflow:hidden;gap:2px}
@@ -607,6 +620,7 @@ html.stage .live{top:63px}
       <div class="actions">
         <button class="btn primary" data-go="1">Start the primer →</button>
         <button class="btn ghost" data-view="deal">Skip to the deal</button>
+        <button class="filmact" data-film="primer"><span class="play"><svg viewBox="0 0 11 12"><path d="M0 0l11 6-11 6z"/></svg></span><span>Watch the film</span><span class="dur">2:51</span></button>
       </div>
     </div>
 
@@ -710,6 +724,7 @@ html.stage .live{top:63px}
     <div class="deal-head">
       <div class="lab">01 · The Deal</div>
       <h2 style="margin-top:8px" id="deal-title">Stack the moves until the bank says yes.</h2>
+      <button class="filmact" data-film="deal"><span class="play"><svg viewBox="0 0 11 12"><path d="M0 0l11 6-11 6z"/></svg></span><span>Play the walkthrough</span><span class="dur">2:11</span></button>
     </div>
     <figure class="bld" id="bld" aria-label="Elevation of the building">
       <img class="bld-f" id="bld-f" src="img/bld/f5.webp" alt="Front elevation of the building">
@@ -830,6 +845,10 @@ html.stage .live{top:63px}
     <div class="live"><span>DSCR <b id="l-dscr"></b></span><span>NOI <b id="l-noi"></b></span><span>IRR <b id="l-irr"></b></span><span class="sp"></span><button class="btn sm" id="reset" title="Reset every input to its default">Reset</button></div>
     <div id="afields"></div>
   </section>
+  <dialog class="film" id="filmdlg" aria-label="Film">
+    <video id="filmvid" controls playsinline preload="metadata"></video>
+    <div class="filmbar"><span class="lab" id="filmlab"></span><button type="button" id="filmclose">Close</button></div>
+  </dialog>
   </main>
   </div>
 
@@ -1365,6 +1384,26 @@ $('#gl-search').addEventListener('input',renderGlossary);
 
 /* ================= NAVIGATION ================= */
 const STEPS=$$('.step').length, VIEWNAMES={primer:'Primer',deal:'The Deal',glossary:'Glossary',inputs:'Inputs'};
+const FILMS = {
+  primer: { title: 'See your building the way the bank does', dur: '2:51', src: 'https://d2ol7oe51mr4n9.cloudfront.net/user_3H6RZcwfM51zyWkqWx5zzEocYh9/0162ffe9-f9d3-49e2-a3fd-cf59dff362e6.mp4', vtt: 'film/film-one.vtt' },
+  deal:   { title: 'Stack the moves until the bank says yes', dur: '2:11', src: 'https://d2ol7oe51mr4n9.cloudfront.net/user_3H6RZcwfM51zyWkqWx5zzEocYh9/cdaa3d39-a4e3-458a-bfe7-4559c314dd4f.mp4', vtt: 'film/film-two.vtt' },
+};
+function playFilm(id){
+  const f = FILMS[id]; if (!f) return;
+  const dlg = document.getElementById('filmdlg'), v = document.getElementById('filmvid');
+  v.innerHTML = '';
+  v.src = f.src;
+  const t = document.createElement('track'); t.kind = 'subtitles'; t.label = 'Subtitles'; t.srclang = 'en'; t.src = f.vtt; v.appendChild(t);
+  document.getElementById('filmlab').textContent = f.title + ' · ' + f.dur;
+  dlg.showModal();
+  v.play().catch(() => {});
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-film]'); if (b) { playFilm(b.dataset.film); return; }
+  if (e.target.id === 'filmclose') { const dlg = document.getElementById('filmdlg'); dlg.close(); }
+});
+document.getElementById('filmdlg').addEventListener('close', () => { const v = document.getElementById('filmvid'); v.pause(); v.removeAttribute('src'); v.load(); });
+document.getElementById('filmdlg').addEventListener('click', e => { if (e.target.id === 'filmdlg') e.target.close(); });
 function goStep(n){
   state.step=Math.max(0,Math.min(STEPS-1,n));
   $$('.step').forEach(s=>s.classList.toggle('active',+s.dataset.step===state.step));
