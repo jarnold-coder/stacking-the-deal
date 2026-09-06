@@ -33,9 +33,10 @@ Owner: Jonathan Arnold, Arnold Development Group. GitHub account for this repo: 
 
 ## Films
 
-- Two short films, narrated (Higgsfield seed_audio, preset "Helena"), paper-diorama cutaways plus app captures, cut with higgsedit: *See your building the way the bank does* (the Primer, 2:51) and *Stack the moves until the bank says yes* (the Deal, 2:11). The MP4s are hosted on Higgsfield's CDN (URLs in `FILMS` in `src/app.html`); the repo keeps only the subtitle sidecars in `film/` (`film-one.vtt`, `film-two.vtt`, plus SRT). Local MP4 copies live in `film/` too but are git-ignored.
-- In the app: "Watch the film" on the Primer cover and "Play the walkthrough" under the Deal headline open one `<dialog class="film">` player (`playFilm()`); subtitles are an optional track the viewer toggles in the player. Subtitled (burned-in) copies exist as well for places without caption controls.
-- Production files (edit scripts, captures, narration takes, stills, upload manifests) are in the design session's scratchpad `film/`, not the repo. Re-rendering means re-running the higgsedit build in a Higgsfield sandbox from those scripts.
+- Film one, *See your building the way the bank does* (Primer cover, 2:50), is a fully generated explainer from Higgsfield's faceless-video workflow: 17 ten-second paper-diorama blocks (minimax_h3, 2K, five hard-cut shots each, built from a seedream_v5_pro style key and 15 reference assets), one ElevenLabs "Helena" take per block, assembled and captioned in the Higgsfield sandbox. Master (clean) `d83b0255-…mp4` and a burned-caption copy `c7200543-…mp4` sit on Higgsfield's CDN; the app plays the clean master with `film/film-one.vtt` as an optional track. Local copies `film/film-one-v2*.mp4` are git-ignored; `film/film-one-v2.srt` and the frame sheet `film/film-one-v2-frames.jpg` are the review record.
+- Film two, *Stack the moves until the bank says yes* (under the Deal headline, 2:11), is still the first-cut higgsedit version (app captures plus diorama clips under Helena narration, `film/film-two.vtt`). Whether to regenerate it the same way or demo the Deal live is an open decision.
+- In the app: "Watch the film" and "Play the walkthrough" open one `<dialog class="film">` player (`playFilm()`, `FILMS` registry in `src/app.html`); subtitles are a toggleable track.
+- Production files (script manifest, block prompts, asset and clip ids, take URLs, assembly command) are in the design session's scratchpad `film/gen/`, not the repo; the ids are also recorded in the project memory. Re-rendering a block means a new minimax_h3 job with the same references and the assembler, not a redraw.
 
 ## App structure (inside `src/app.html`)
 
