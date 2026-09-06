@@ -1,0 +1,347 @@
+1
+00:00:01,500 --> 00:00:03,280
+Three numbers decide whether
+
+2
+00:00:03,280 --> 00:00:04,620
+your building gets built.
+
+3
+00:00:05,100 --> 00:00:07,140
+Every green strategy you already
+
+4
+00:00:07,140 --> 00:00:08,440
+know has a line in
+
+5
+00:00:08,440 --> 00:00:08,900
+a spreadsheet.
+
+6
+00:00:11,130 --> 00:00:12,850
+Before anyone talks about rent,
+
+7
+00:00:12,850 --> 00:00:14,270
+the building is a pile
+
+8
+00:00:14,270 --> 00:00:16,670
+of costs, and underwriters sort
+
+9
+00:00:16,670 --> 00:00:18,550
+that pile into five buckets.
+
+10
+00:00:20,780 --> 00:00:23,060
+Land, hard and soft costs,
+
+11
+00:00:23,400 --> 00:00:25,120
+developer's fee and contingency:
+
+12
+00:00:25,580 --> 00:00:27,120
+thirty-eight and a half million
+
+13
+00:00:27,120 --> 00:00:28,640
+for a hundred twenty units.
+
+14
+00:00:30,120 --> 00:00:31,750
+Three hundred twenty thousand,
+
+15
+00:00:31,750 --> 00:00:34,000
+five hundred each: land,
+
+16
+00:00:34,000 --> 00:00:35,980
+foundation and roof are fixed,
+
+17
+00:00:35,980 --> 00:00:37,980
+everything in between scales
+
+18
+00:00:37,980 --> 00:00:39,340
+with each unit you add.
+
+19
+00:00:40,900 --> 00:00:42,550
+Two kinds of money build
+
+20
+00:00:42,550 --> 00:00:42,720
+it.
+
+21
+00:00:42,720 --> 00:00:44,400
+The bank lends at six
+
+22
+00:00:44,400 --> 00:00:45,640
+and a quarter percent and
+
+23
+00:00:45,640 --> 00:00:47,120
+wants the same payment every
+
+24
+00:00:47,120 --> 00:00:47,520
+month.
+
+25
+00:00:50,660 --> 00:00:51,960
+For thirty years,
+
+26
+00:00:52,380 --> 00:00:53,380
+full building or not.
+
+27
+00:00:53,800 --> 00:00:55,700
+Investors want fifteen percent
+
+28
+00:00:55,700 --> 00:00:57,080
+and get paid last,
+
+29
+00:00:57,500 --> 00:00:58,680
+only from what is left
+
+30
+00:00:58,680 --> 00:00:59,040
+over.
+
+31
+00:01:00,620 --> 00:01:02,420
+The bank doesn't lend seventy
+
+32
+00:01:02,420 --> 00:01:04,020
+percent because it's generous.
+
+33
+00:01:04,640 --> 00:01:05,940
+It lends what the income
+
+34
+00:01:05,940 --> 00:01:07,040
+can safely repay,
+
+35
+00:01:07,600 --> 00:01:08,960
+so we need the income.
+
+36
+00:01:10,450 --> 00:01:12,830
+Rent less vacancy minus expenses
+
+37
+00:01:12,830 --> 00:01:15,470
+equals net operating income, the
+
+38
+00:01:15,470 --> 00:01:15,870
+paycheck,
+
+39
+00:01:16,350 --> 00:01:17,830
+at two point twenty-three
+
+40
+00:01:17,830 --> 00:01:19,270
+million dollars a year.
+
+41
+00:01:20,250 --> 00:01:22,110
+Every line is a design
+
+42
+00:01:22,110 --> 00:01:22,550
+decision:
+
+43
+00:01:23,190 --> 00:01:24,570
+the envelope sets utilities,
+
+44
+00:01:25,070 --> 00:01:26,290
+construction type drives
+
+45
+00:01:26,290 --> 00:01:26,810
+insurance
+
+46
+00:01:27,350 --> 00:01:29,170
+and amenities decide vacancy.
+
+47
+00:01:30,700 --> 00:01:32,200
+Divide the paycheck by the
+
+48
+00:01:32,200 --> 00:01:33,980
+cost and this building yields
+
+49
+00:01:33,980 --> 00:01:35,980
+five point seven nine percent,
+
+50
+00:01:36,320 --> 00:01:37,960
+while the loan costs seven
+
+51
+00:01:37,960 --> 00:01:38,800
+point three nine.
+
+52
+00:01:40,620 --> 00:01:42,300
+That gap is the whole
+
+53
+00:01:42,300 --> 00:01:42,880
+story.
+
+54
+00:01:43,540 --> 00:01:44,660
+How many times does the
+
+55
+00:01:44,660 --> 00:01:46,160
+paycheck cover the loan payment,
+
+56
+00:01:46,160 --> 00:01:47,720
+when the bank wants one
+
+57
+00:01:47,720 --> 00:01:48,580
+point twenty-five?
+
+58
+00:01:50,260 --> 00:01:52,840
+This building covers it one
+
+59
+00:01:52,840 --> 00:01:55,660
+point twelve times, barely and
+
+60
+00:01:55,660 --> 00:01:57,400
+not enough, so the bank
+
+61
+00:01:57,400 --> 00:01:58,840
+shrinks the loan to reach
+
+62
+00:01:58,840 --> 00:01:59,300
+the cushion.
+
+63
+00:02:00,580 --> 00:02:02,440
+The building needs twenty-six
+
+64
+00:02:02,440 --> 00:02:03,470
+point nine million;
+
+65
+00:02:04,060 --> 00:02:05,720
+the bank offers twenty-four
+
+66
+00:02:05,720 --> 00:02:07,360
+point one, leaving a hole
+
+67
+00:02:07,360 --> 00:02:08,780
+of two point seven nine.
+
+68
+00:02:10,910 --> 00:02:12,430
+Someone has to fill that
+
+69
+00:02:12,430 --> 00:02:13,850
+hole with expensive money.
+
+70
+00:02:14,390 --> 00:02:15,810
+After the bank is paid,
+
+71
+00:02:16,250 --> 00:02:17,910
+whatever is left belongs to
+
+72
+00:02:17,910 --> 00:02:18,410
+the investors.
+
+73
+00:02:20,940 --> 00:02:21,750
+Two point one percent on
+
+74
+00:02:21,750 --> 00:02:22,740
+the eleven and a half
+
+75
+00:02:22,740 --> 00:02:23,960
+million they put in.
+
+76
+00:02:24,420 --> 00:02:26,280
+Then fifteen years of rent
+
+77
+00:02:26,280 --> 00:02:27,620
+growth and a sale.
+
+78
+00:02:30,660 --> 00:02:32,240
+That becomes a ten and
+
+79
+00:02:32,240 --> 00:02:33,460
+a half percent return,
+
+80
+00:02:33,900 --> 00:02:35,120
+and they wanted fifteen.
+
+81
+00:02:36,120 --> 00:02:37,520
+Nothing about this building's
+
+82
+00:02:37,520 --> 00:02:39,020
+design is wrong at all.
+
+83
+00:02:42,000 --> 00:02:44,000
+It dies in underwriting, not
+
+84
+00:02:44,000 --> 00:02:44,900
+in design review,
+
+85
+00:02:45,420 --> 00:02:46,680
+and every move that fixes
+
+86
+00:02:46,680 --> 00:02:48,020
+it is something you already
+
+87
+00:02:48,020 --> 00:02:48,880
+know how to draw.
