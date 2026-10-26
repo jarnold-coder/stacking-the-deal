@@ -67,6 +67,10 @@ const DEVICES = {
   await go(() => goView('inputs')); await shot('17-inputs-top');
   await scrollTo('#af-rate'); await shot('18-inputs-debt');
 
+  // About
+  await go(() => goView('about')); await shot('18b-about-top');
+  await scrollTo('.cta'); await shot('18c-about-cta');
+
   // Dark mode and a smaller phone
   await page.emulateMediaFeatures([{ name: 'prefers-color-scheme', value: 'dark' }]);
   await go(() => goView('deal')); await shot('19-deal-dark');
